@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "bob.hpp"
 #include "text.hpp"
 
 int main() {
@@ -13,8 +14,8 @@ int main() {
 		" abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?"
 	);
 	font->setKerning(2);
-	Text t1(font);
-	t1.setText(20, 20, "There is some text here");
+
+	BobbingText text(font);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
@@ -37,7 +38,7 @@ int main() {
 		}
 
 		window.clear();
-		window.draw(t1);
+		window.draw(text);
 		window.display();
 	}
 
