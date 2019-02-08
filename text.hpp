@@ -27,6 +27,8 @@ public:
 	const std::map<char, sf::IntRect> getGlyphMap() const;
 	const sf::Texture& getTexture() const;
 
+	const std::string& getCharacters() const;
+
 	int getKerning() const;
 	void setKerning(int kerning);
 };

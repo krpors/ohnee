@@ -92,6 +92,10 @@ const sf::Texture& ImageFont::getTexture() const {
 	return this->texture;
 }
 
+const std::string& ImageFont::getCharacters() const {
+	return this->glyphs;
+}
+
 int ImageFont::getKerning() const {
 	return this->kerning;
 }
@@ -125,6 +129,9 @@ void Text::setText(float x, float y, const std::string& str) {
 }
 
 void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	// TODO: use vertexarray to prevent texture glitches?
+	// TODO: optimize thisby only calculating stuff when needed (i.e. cache stuff)
+
 	// TODO: this transform will do it relative to a parent. figure it out properly.
 	// states.transform = this->getTransform();
 	sf::Sprite sprite(font->getTexture());

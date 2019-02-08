@@ -37,6 +37,8 @@ int main() {
 			}
 		}
 
+		text.update(elapsed);
+
 		window.clear();
 		window.draw(text);
 		window.display();

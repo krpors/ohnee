@@ -1,23 +1,36 @@
 #include <memory>
+#include <iostream>
+
+#include <cmath>
+
+#include <SFML/Graphics.hpp>
 
 #include "bob.hpp"
 #include "text.hpp"
 
 BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) {
 	this->font = font;
-
+	this->timer = 0.0f;
 	this->text.setFont(this->font);
-	this->text.setText(20, 20, "HERRO THERE!");
+	this->text.setText(20, 20, font->getCharacters());
+
+
 }
 
 BobbingText::~BobbingText() {
 }
 
+void BobbingText::update(const sf::Time& dt) {
+	this->timer += dt.asSeconds();
+}
+
 void BobbingText::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 2.0f;
+
+	std::cout << f << std::endl;
 	sf::Transform t;
-	t.scale(6, 6);
+	t.transformPoint(100, 200);
+	t.scale(f, f);
 	states.transform *= t;
-	target.draw(this->text, states);
-	t.translate(20, 20);
 	target.draw(this->text, states);
 }
