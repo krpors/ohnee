@@ -17,6 +17,8 @@ private:
 
 	sf::Image   image;
 	sf::Texture texture;
+
+	sf::VertexArray varray;
 public:
 	ImageFont();
 	ImageFont(const std::string& filename, const std::string& glyphs);

@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <sstream>
 
 #include <cmath>
 
@@ -12,7 +13,10 @@ BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) {
 	this->font = font;
 	this->timer = 0.0f;
 	this->text.setFont(this->font);
-	this->text.setText(20, 20, font->getCharacters());
+	std::stringstream ss;
+	ss << font->getCharacters() << std::endl;
+	ss << "Derp de derp.";
+	this->text.setText(20, 20, ss.str());
 
 
 }
@@ -25,7 +29,7 @@ void BobbingText::update(const sf::Time& dt) {
 }
 
 void BobbingText::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 2.0f;
+	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
 
 	std::cout << f << std::endl;
 	sf::Transform t;
