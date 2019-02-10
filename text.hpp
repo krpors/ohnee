@@ -17,8 +17,6 @@ private:
 
 	sf::Image   image;
 	sf::Texture texture;
-
-	sf::VertexArray varray;
 public:
 	ImageFont();
 	ImageFont(const std::string& filename, const std::string& glyphs);
@@ -45,6 +43,7 @@ private:
 	std::shared_ptr<ImageFont> font;
 	std::string text = "";
 
+	sf::VertexArray varray;
 public:
 	Text();
 	Text(const std::shared_ptr<ImageFont>& font);

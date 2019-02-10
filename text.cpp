@@ -126,17 +126,9 @@ void Text::setFont(const std::shared_ptr<ImageFont>& font) {
 void Text::setText(float x, float y, const std::string& str) {
 	setPosition(x, y);
 	this->text = str;
-}
 
-void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	// TODO: use vertexarray to prevent texture glitches?
-	// TODO: optimize thisby only calculating stuff when needed (i.e. cache stuff)
-
-	// TODO: this transform will do it relative to a parent. figure it out properly.
-	// states.transform = this->getTransform();
-	sf::VertexArray arr(sf::Quads);
-
-	sf::Sprite sprite(font->getTexture());
+	this->varray.clear();
+	this->varray.setPrimitiveType(sf::Quads);
 	sf::Vector2f position = getPosition();
 	int kerning = this->font->getKerning();
 	const std::map<char, sf::IntRect>& map = this->font->getGlyphMap();
@@ -149,25 +141,28 @@ void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 		auto search = map.find(c);
 		if (search != map.end()) {
-			sf::IntRect texrect = search->second;
+			sf::IntRect bleh = search->second;
+			sf::FloatRect texrect;
+			texrect.left   = static_cast<float>(bleh.left);
+			texrect.top    = static_cast<float>(bleh.top);
+			texrect.width  = static_cast<float>(bleh.width);
+			texrect.height = static_cast<float>(bleh.height);
 			// Note: the + 0.5f seems to fix some sort of texture glitch.
 			sf::Vertex topleft({ position.x, position.y}, {texrect.left + 0.5f, texrect.top});
 			sf::Vertex topright({ position.x + texrect.width, position.y }, { texrect.left + texrect.width, texrect.top});
 			sf::Vertex bottomright( { position.x + texrect.width, position.y + texrect.height}, {texrect.left + texrect.width, texrect.top + texrect.height});
 			sf::Vertex bottomleft( { position.x, position.y + texrect.height}, {texrect.left, texrect.top + texrect.height});
-			arr.append(topleft);
-			arr.append(topright);
-			arr.append(bottomright);
-			arr.append(bottomleft);
+			this->varray.append(topleft);
+			this->varray.append(topright);
+			this->varray.append(bottomright);
+			this->varray.append(bottomleft);
 
-			// sprite.setTextureRect(texrect);
-			// sprite.setPosition(position);
 			position.x += search->second.width + kerning;
-
-			// target.draw(sprite, states);
  		}
 	}
+}
 
+void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.texture = &font->getTexture();
-	target.draw(arr, states);
+	target.draw(this->varray, states);
 }
