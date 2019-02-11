@@ -24,6 +24,12 @@ void ImageFont::load(const std::string& file, const std::string& glyphs) {
 		throw "Unable to open file '" + file + "'";
 	}
 
+	// Get the separator color of the image, which is the topleft pixel of the image.
+	// Make those pixels as a mask. We use the mask 'color' later on to separate the
+	// glyphs.
+	sf::Color sepColor = image.getPixel(0, 0);
+	this->image.createMaskFromColor(sepColor);
+
 	if (!this->texture.loadFromImage(this->image)) {
 		throw "Unable to load texture from image object";
 	}
@@ -32,8 +38,8 @@ void ImageFont::load(const std::string& file, const std::string& glyphs) {
 
 	std::clog << "ImageFont created with image file " << file << std::endl;
 
-	// Get the separator color of the image, which is the topleft pixel of the image.
-	sf::Color sepColor = image.getPixel(0, 0);
+	// Reget the separation color. This is now a masked color.
+	sepColor = image.getPixel(0, 0);
 
 	// The vector containing rectangle for all the glyphs.
 	std::vector<sf::IntRect> glyphRects;
@@ -147,8 +153,8 @@ void Text::setText(float x, float y, const std::string& str) {
 			texrect.top    = static_cast<float>(bleh.top);
 			texrect.width  = static_cast<float>(bleh.width);
 			texrect.height = static_cast<float>(bleh.height);
-			// Note: the + 0.5f seems to fix some sort of texture glitch.
-			sf::Vertex topleft({ position.x, position.y}, {texrect.left + 0.5f, texrect.top});
+
+			sf::Vertex topleft({ position.x, position.y}, {texrect.left, texrect.top});
 			sf::Vertex topright({ position.x + texrect.width, position.y }, { texrect.left + texrect.width, texrect.top});
 			sf::Vertex bottomright( { position.x + texrect.width, position.y + texrect.height}, {texrect.left + texrect.width, texrect.top + texrect.height});
 			sf::Vertex bottomleft( { position.x, position.y + texrect.height}, {texrect.left, texrect.top + texrect.height});
