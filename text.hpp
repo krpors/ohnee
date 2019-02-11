@@ -41,9 +41,11 @@ public:
 class Text : public sf::Drawable, public sf::Transformable {
 private:
 	std::shared_ptr<ImageFont> font;
+	sf::VertexArray varray;
+
+protected:
 	std::string text = "";
 
-	sf::VertexArray varray;
 public:
 	Text();
 	Text(const std::shared_ptr<ImageFont>& font);
