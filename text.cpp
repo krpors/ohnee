@@ -130,8 +130,11 @@ void Text::setFont(const std::shared_ptr<ImageFont>& font) {
 }
 
 void Text::setText(float x, float y, const std::string& str) {
-	setPosition(x, y);
+	this->setPosition(x, y);
+	this->setOrigin(x, y);
 	this->text = str;
+
+	// TODO there is still a bug with the small glyphs
 
 	this->varray.clear();
 	this->varray.setPrimitiveType(sf::Quads);
@@ -170,5 +173,14 @@ void Text::setText(float x, float y, const std::string& str) {
 
 void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.texture = &font->getTexture();
+
+	sf::CircleShape origin;
+	origin.setRadius(2.0f);
+	origin.setFillColor(sf::Color::Red);
+	origin.setPosition(getPosition());
+
+	states.transform *= getTransform();
+
 	target.draw(this->varray, states);
+	target.draw(origin);
 }
