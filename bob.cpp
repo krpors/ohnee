@@ -16,10 +16,10 @@ BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) :
 	std::stringstream ss;
 	ss << "I am currently watching" << std::endl
 	   << "the Tragedy of systemd." << std::endl
-	   << "*()-=_+|/\\:;'\"<>,.?" << std::endl;
+	   << "!@#$%^&*()-=_+|/\\:;'\"<>,.?" << std::endl;
 
-	Text::setText(10, 300, ss.str());
-	Text::setOrigin(10, 300 + (3 * 24 / 2));
+	Text::setText(150, 300, ss.str());
+	Text::setOrigin(250, 300 + (3 * 24 / 2));
 }
 
 BobbingText::~BobbingText() {
@@ -28,7 +28,7 @@ BobbingText::~BobbingText() {
 
 void BobbingText::update(const sf::Time& dt) {
 	this->timer += dt.asSeconds();
-	float f = 2.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
+	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
 	float r = 20.0f * cos(3.14f * this->timer);
 	setScale(f, f);
 	setRotation(r);

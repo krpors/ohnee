@@ -28,18 +28,8 @@ void ImageFont::load(const std::string& file, const std::string& glyphs) {
 	// Make those pixels as a mask. We use the mask 'color' later on to separate the
 	// glyphs.
 	sf::Color sepColor = image.getPixel(0, 0);
-	this->image.createMaskFromColor(sepColor);
-
-	if (!this->texture.loadFromImage(this->image)) {
-		throw "Unable to load texture from image object";
-	}
-
-	texture.setSmooth(false);
 
 	std::clog << "ImageFont created with image file " << file << std::endl;
-
-	// Reget the separation color. This is now a masked color.
-	sepColor = image.getPixel(0, 0);
 
 	// The vector containing rectangle for all the glyphs.
 	std::vector<sf::IntRect> glyphRects;
@@ -81,6 +71,11 @@ void ImageFont::load(const std::string& file, const std::string& glyphs) {
 	for (auto& rect : glyphRects) {
 		// map the current character in the 'glyphs' string to the rectangle.
 		this->glyphMap[this->glyphs[counter++]] = rect;
+	}
+
+	this->image.createMaskFromColor(sepColor);
+	if (!this->texture.loadFromImage(this->image)) {
+		throw "Unable to load texture from image object";
 	}
 
 	std::clog << "Initialized ImageFont with " << glyphCount << " glyphs" << std::endl;

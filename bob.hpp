@@ -11,5 +11,4 @@ public:
 	BobbingText(const std::shared_ptr<ImageFont>& font);
 	~BobbingText();
 	void update(const sf::Time& dt);
-	// void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
