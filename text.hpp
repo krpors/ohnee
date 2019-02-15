@@ -43,6 +43,8 @@ private:
 	std::shared_ptr<ImageFont> font;
 	sf::VertexArray varray;
 
+	void initializeVertexArray();
+
 protected:
 	std::string text = "";
 

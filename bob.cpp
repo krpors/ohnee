@@ -18,8 +18,8 @@ BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) :
 	   << "the Tragedy of systemd." << std::endl
 	   << "!@#$%^&*()-=_+|/\\:;'\"<>,.?" << std::endl;
 
-	Text::setText(ss.str());
 	Text::setPosition(150, 200);
+	Text::setText(ss.str());
 	// Text::setOrigin(150, 300);
 }
 
@@ -29,13 +29,22 @@ BobbingText::~BobbingText() {
 
 void BobbingText::handleInput(const sf::Event& event) {
 	sf::Vector2f orig = Text::getOrigin();
-	switch (event.key.code) {
-	case sf::Keyboard::W: Text::setOrigin(orig.x, orig.y -= 10); break;
-	case sf::Keyboard::A: Text::setOrigin(orig.x -= 10, orig.y); break;
-	case sf::Keyboard::S: Text::setOrigin(orig.x, orig.y += 10); break;
-	case sf::Keyboard::D: Text::setOrigin(orig.x += 10, orig.y); break;
-	default:
-		break;
+	sf::Vector2f pos = Text::getPosition();
+
+	if (event.type == sf::Event::KeyPressed) {
+		switch (event.key.code) {
+		case sf::Keyboard::W: Text::setOrigin(orig.x, orig.y -= 10); break;
+		case sf::Keyboard::A: Text::setOrigin(orig.x -= 10, orig.y); break;
+		case sf::Keyboard::S: Text::setOrigin(orig.x, orig.y += 10); break;
+		case sf::Keyboard::D: Text::setOrigin(orig.x += 10, orig.y); break;
+
+		case sf::Keyboard::K: Text::setPosition(pos.x, pos.y -= 10); break;
+		case sf::Keyboard::H: Text::setPosition(pos.x -= 10, pos.y); break;
+		case sf::Keyboard::J: Text::setPosition(pos.x, pos.y += 10); break;
+		case sf::Keyboard::L: Text::setPosition(pos.x += 10, pos.y); break;
+		default:
+			break;
+		}
 	}
 
 	std::cout << Text::getOrigin().x << std::endl;

@@ -124,20 +124,19 @@ void Text::setFont(const std::shared_ptr<ImageFont>& font) {
 	this->font = font;
 }
 
-void Text::setText(const std::string& str) {
-	this->text = str;
-
+void Text::initializeVertexArray() {
 	// TODO there is still a bug with the small glyphs
 
 	this->varray.clear();
 	this->varray.setPrimitiveType(sf::Quads);
-	sf::Vector2f position = getPosition();
+	float x = 0;
+	float y = 0;
 	int kerning = this->font->getKerning();
 	const std::map<char, sf::IntRect>& map = this->font->getGlyphMap();
 	for (const char& c : this->text) {
 		if (c == '\n') {
-			position.x = getPosition().x;
-			position.y += this->font->getFontHeight();
+			x = 0;
+			y += this->font->getFontHeight();
 			continue;
 		}
 
@@ -150,23 +149,31 @@ void Text::setText(const std::string& str) {
 			texrect.width  = static_cast<float>(bleh.width);
 			texrect.height = static_cast<float>(bleh.height);
 
-			sf::Vertex topleft({ position.x, position.y}, {texrect.left, texrect.top});
-			sf::Vertex topright({ position.x + texrect.width, position.y }, { texrect.left + texrect.width, texrect.top});
-			sf::Vertex bottomright( { position.x + texrect.width, position.y + texrect.height}, {texrect.left + texrect.width, texrect.top + texrect.height});
-			sf::Vertex bottomleft( { position.x, position.y + texrect.height}, {texrect.left, texrect.top + texrect.height});
+			sf::Vertex topleft({ x, y}, {texrect.left, texrect.top});
+			sf::Vertex topright({ x + texrect.width, y }, { texrect.left + texrect.width, texrect.top});
+			sf::Vertex bottomright( { x + texrect.width, y + texrect.height}, {texrect.left + texrect.width, texrect.top + texrect.height});
+			sf::Vertex bottomleft( { x, y + texrect.height}, {texrect.left, texrect.top + texrect.height});
 			this->varray.append(topleft);
 			this->varray.append(topright);
 			this->varray.append(bottomright);
 			this->varray.append(bottomleft);
 
-			position.x += search->second.width + kerning;
+			x += search->second.width + kerning;
  		}
 	}
 }
 
+void Text::setText(const std::string& str) {
+	if (str == this->text) {
+		// nothing to change.
+		return;
+	}
+	this->text = str;
+	this->initializeVertexArray();
+}
+
 void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.texture = &font->getTexture();
-
 	states.transform *= getTransform();
 
 	target.draw(this->varray, states);
