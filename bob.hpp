@@ -10,5 +10,7 @@ private:
 public:
 	BobbingText(const std::shared_ptr<ImageFont>& font);
 	~BobbingText();
+
+	void handleInput(const sf::Event& event);
 	void update(const sf::Time& dt);
 };

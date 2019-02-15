@@ -35,6 +35,8 @@ int main() {
 				default: break;
 				}
 			}
+
+			text.handleInput(event);
 		}
 
 		text.update(elapsed);

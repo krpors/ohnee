@@ -52,7 +52,7 @@ public:
 	~Text();
 
 	void setFont(const std::shared_ptr<ImageFont>& font);
-	void setText(float x, float y, const std::string& str);
+	void setText(const std::string& str);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
