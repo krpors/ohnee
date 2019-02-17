@@ -7,6 +7,7 @@
 
 #include "bob.hpp"
 #include "text.hpp"
+#include "player.hpp"
 
 int main() {
 	std::shared_ptr<ImageFont> font = std::make_shared<ImageFont>(
@@ -16,6 +17,9 @@ int main() {
 	font->setKerning(2);
 
 	BobbingText text(font);
+
+	Player p;
+	p.setPosition(150, 150);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
@@ -36,13 +40,16 @@ int main() {
 				}
 			}
 
+			p.handleInput(event);
 			text.handleInput(event);
 		}
 
 		text.update(elapsed);
+		p.update(elapsed);
 
 		window.clear();
 		window.draw(text);
+		window.draw(p);
 		window.display();
 	}
 

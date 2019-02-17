@@ -20,7 +20,6 @@ BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) :
 
 	Text::setPosition(150, 200);
 	Text::setText(ss.str());
-	// Text::setOrigin(150, 300);
 }
 
 BobbingText::~BobbingText() {
@@ -46,14 +45,12 @@ void BobbingText::handleInput(const sf::Event& event) {
 			break;
 		}
 	}
-
-	std::cout << Text::getOrigin().x << std::endl;
 }
 
 void BobbingText::update(const sf::Time& dt) {
 	this->timer += dt.asSeconds();
-	float f = 2.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
+	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
 	float r = 20.0f * cos(3.14f * this->timer);
 	setScale(f, f);
-	setRotation(r);
+	// setRotation(r);
 }
