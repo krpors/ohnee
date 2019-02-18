@@ -4,8 +4,10 @@
 
 class Pos {
 public:
-	int x;
-	int y;
+	float x;
+	float y;
+
+	Pos(float x, float y) : x(x), y(y) {}
 };
 
 class Player : public sf::Drawable, public sf::Transformable {

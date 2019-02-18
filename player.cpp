@@ -37,15 +37,21 @@ void Player::update(const sf::Time& dt) {
 	float dx = std::cos(this->angle * bleh) * 80 * dt.asSeconds();
 	float dy = std::sin(this->angle * bleh) * 80 * dt.asSeconds();
 
+	move(dx, dy);
+
+	this->positions.emplace_back( getPosition().x, getPosition().y );
+
+	// std::cout << this->positions.size() << std::endl;
+#if 0
 	std::cout << "Angle: " << this->angle
 		<< ", dx: " << dx
 		<< ", dy: " << dy
 		<< std::endl;
-
-	move(dx, dy);
+#endif
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+
 	states.transform *= getTransform();
 
 	sf::CircleShape shape;
@@ -54,4 +60,17 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	shape.setFillColor(sf::Color::Red);
 
 	target.draw(shape, states);
+
+	sf::VertexArray varr(sf::Points);
+	varr.append(sf::Vertex(getPosition(), sf::Color::Yellow));
+
+	target.draw(varr, states);
+
+	for (Pos p : this->positions) {
+		sf::CircleShape a;
+		a.setRadius(this->radius);
+		a.setPosition(p.x, p.y);
+		a.setFillColor(sf::Color::Red);
+		target.draw(a, states);
+	}
 }

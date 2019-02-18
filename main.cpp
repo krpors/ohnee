@@ -21,8 +21,12 @@ int main() {
 	Player p;
 	p.setPosition(150, 150);
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close);
+	sf::ContextSettings ctx;
+	ctx.antialiasingLevel = 4;
+	sf::RenderWindow window(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close, ctx);
 	window.setVerticalSyncEnabled(true);
+
+	bool paused = false;
 
 	sf::Clock clock;
 	while (window.isOpen()) {
@@ -36,12 +40,17 @@ int main() {
 			if (event.type == sf::Event::KeyPressed) {
 				switch (event.key.code) {
 				case sf::Keyboard::Escape: window.close(); break;
+				case sf::Keyboard::Space: paused = !paused; break;
 				default: break;
 				}
 			}
 
 			p.handleInput(event);
 			text.handleInput(event);
+		}
+
+		if (paused) {
+			continue;
 		}
 
 		text.update(elapsed);
