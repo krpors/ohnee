@@ -19,7 +19,6 @@ int main() {
 	BobbingText text(font);
 
 	Player p;
-	p.setPosition(150, 150);
 
 	sf::ContextSettings ctx;
 	ctx.antialiasingLevel = 4;

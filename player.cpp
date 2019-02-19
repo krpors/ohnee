@@ -18,7 +18,6 @@ void Player::handleInput(const sf::Event& event) {
 
 	switch (event.key.code) {
 	case sf::Keyboard::Left:
-		std::cout << "Herro!" << std::endl;
 		this->angle -= 8;
 		break;
 	case sf::Keyboard::Right:
@@ -30,43 +29,43 @@ void Player::handleInput(const sf::Event& event) {
 void Player::update(const sf::Time& dt) {
 	t += dt;
 
-	sf::Vector2f pos = this->getPosition();
-
 	float bleh = M_PI / 180.0f;
 
-	float dx = std::cos(this->angle * bleh) * 80 * dt.asSeconds();
-	float dy = std::sin(this->angle * bleh) * 80 * dt.asSeconds();
+	float dx = std::cos(this->angle * bleh) * 120 * dt.asSeconds();
+	float dy = std::sin(this->angle * bleh) * 120 * dt.asSeconds();
 
-	move(dx, dy);
+	pos.x += dx;
+	pos.y += dy;
 
-	this->positions.emplace_back( getPosition().x, getPosition().y );
+	int threshold = this->radius / 3; // in pixels
 
-	// std::cout << this->positions.size() << std::endl;
-#if 0
-	std::cout << "Angle: " << this->angle
-		<< ", dx: " << dx
-		<< ", dy: " << dy
-		<< std::endl;
-#endif
+	// Calculate the distance travelled by adding the delta x and y
+	this->distanceTravelled += std::fabs(dx) + std::fabs(dy);
+
+	// if the distance travelled exceeds the threshold, add the current position
+	// to the history of positions so we can draw the path we travelled later on.
+	// This is more of an optimization step rather than a visual step.
+	if (this->distanceTravelled > threshold) {
+		this->positions.emplace_back(pos);
+		this->distanceTravelled = 0.0f;
+	}
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-
-	states.transform *= getTransform();
-
 	sf::CircleShape shape;
 	shape.setRadius(this->radius);
-	shape.setPosition(getPosition());
+	shape.setPosition(this->pos);
 	shape.setFillColor(sf::Color::Red);
 
 	target.draw(shape, states);
 
 	sf::VertexArray varr(sf::Points);
-	varr.append(sf::Vertex(getPosition(), sf::Color::Yellow));
+	varr.append(sf::Vertex(this->pos, sf::Color::Yellow));
 
 	target.draw(varr, states);
 
-	for (Pos p : this->positions) {
+	// Draw the path of the player
+	for (sf::Vector2f p : this->positions) {
 		sf::CircleShape a;
 		a.setRadius(this->radius);
 		a.setPosition(p.x, p.y);

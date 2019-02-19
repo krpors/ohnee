@@ -2,17 +2,14 @@
 
 #include <SFML/Graphics.hpp>
 
-class Pos {
-public:
-	float x;
-	float y;
-
-	Pos(float x, float y) : x(x), y(y) {}
-};
-
-class Player : public sf::Drawable, public sf::Transformable {
+class Player : public sf::Drawable {
 private:
-	std::vector<Pos> positions;
+
+	std::vector<sf::Vector2f> positions;
+
+	float distanceTravelled = 0.0f;
+
+	sf::Vector2f pos;
 	int radius = 10;
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
