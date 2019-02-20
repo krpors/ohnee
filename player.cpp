@@ -12,22 +12,32 @@ Player::~Player() {
 }
 
 void Player::handleInput(const sf::Event& event) {
-	if (event.type != sf::Event::KeyPressed) {
-		return;
-	}
-
-	switch (event.key.code) {
-	case sf::Keyboard::Left:
-		this->angle -= 8;
-		break;
-	case sf::Keyboard::Right:
-		this->angle += 8;
-	default: break;
+	if (event.type == sf::Event::KeyPressed) {
+		switch (event.key.code) {
+		case sf::Keyboard::Left:  this->moveLeft = true;  break;
+		case sf::Keyboard::Right: this->moveRight = true; break;
+		default: break;
+		}
+	} else if (event.type == sf::Event::KeyReleased) {
+		switch (event.key.code) {
+		case sf::Keyboard::Left:  this->moveLeft =  false;  break;
+		case sf::Keyboard::Right: this->moveRight = false; break;
+		default: break;
+		}
 	}
 }
 
 void Player::update(const sf::Time& dt) {
 	t += dt;
+
+	std::cout << "left: " << this->moveLeft << ", right:  " << this->moveRight << std::endl;
+
+	if (this->moveLeft) {
+		this->angle -= 140 * dt.asSeconds();
+	}
+	if (this->moveRight) {
+		this->angle += 140 * dt.asSeconds();
+	}
 
 	float bleh = M_PI / 180.0f;
 

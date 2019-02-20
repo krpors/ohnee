@@ -13,6 +13,9 @@ private:
 	int radius = 10;
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
+
+	bool moveLeft = false;
+	bool moveRight = false;
 public:
 	Player();
 	~Player();
