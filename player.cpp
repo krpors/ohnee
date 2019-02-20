@@ -11,6 +11,25 @@ Player::~Player() {
 
 }
 
+void Player::setStartingPoint(int x, int y, float angle) {
+	this->pos.x = x;
+	this->pos.y = y;
+	this->angle = angle;
+
+}
+
+void Player::setColor(const sf::Color& color) {
+	this->color = color;
+}
+
+bool Player::isColliding(const Player& other) const {
+	// check ourselves first
+	for (const sf::Vector2f& v : other.positions) {
+
+	}
+	return false;
+}
+
 void Player::handleInput(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
@@ -65,7 +84,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	sf::CircleShape shape;
 	shape.setRadius(this->radius);
 	shape.setPosition(this->pos);
-	shape.setFillColor(sf::Color::Red);
+	shape.setFillColor(this->color);
 
 	target.draw(shape, states);
 
@@ -75,11 +94,11 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(varr, states);
 
 	// Draw the path of the player
-	for (sf::Vector2f p : this->positions) {
+	for (const sf::Vector2f& p : this->positions) {
 		sf::CircleShape a;
 		a.setRadius(this->radius);
 		a.setPosition(p.x, p.y);
-		a.setFillColor(sf::Color::Red);
+		a.setFillColor(this->color);
 		target.draw(a, states);
 	}
 }
