@@ -24,9 +24,20 @@ void Player::setColor(const sf::Color& color) {
 
 bool Player::isColliding(const Player& other) const {
 	// check ourselves first
-	for (const sf::Vector2f& v : other.positions) {
-
+	if (&other == this) {
+		// Do not check for all previous positions or we would collide with
+		// ourselves right away. Instead. we iterate from start to end - 10.
+		std::vector<sf::Vector2f>::size_type tosubtract = 10;
+		if (this->positions.size() < tosubtract) {
+			tosubtract = this->positions.size();
+		}
+		for (auto it = this->positions.begin(); it != this->positions.end() - tosubtract; it++) {
+			// std::cout << "checking position " << it->x << std::endl;
+			// TODO: pythagorean theorem to check current player circle with path.
+		}
 	}
+
+	// std::cout << std::endl;
 	return false;
 }
 
@@ -48,8 +59,6 @@ void Player::handleInput(const sf::Event& event) {
 
 void Player::update(const sf::Time& dt) {
 	t += dt;
-
-	std::cout << "left: " << this->moveLeft << ", right:  " << this->moveRight << std::endl;
 
 	if (this->moveLeft) {
 		this->angle -= 140 * dt.asSeconds();
@@ -78,6 +87,8 @@ void Player::update(const sf::Time& dt) {
 		this->positions.emplace_back(pos);
 		this->distanceTravelled = 0.0f;
 	}
+
+	this->isColliding(*this);
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {

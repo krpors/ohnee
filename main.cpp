@@ -9,6 +9,25 @@
 #include "text.hpp"
 #include "player.hpp"
 
+int main_() {
+	std::vector<int> vec;
+	for (int i = 0; i < 50; i++) {
+		vec.push_back(i);
+	}
+
+	std::cout << vec.size() << std::endl;
+
+	std::vector<int>::size_type sz = 10;
+	if (vec.size() < sz) {
+		sz = vec.size();
+	}
+	for(auto it = vec.begin(); it != vec.end() - sz; it++) {
+		std::cout << *it << std::endl;
+	}
+
+	return 0;
+}
+
 int main() {
 	std::shared_ptr<ImageFont> font = std::make_shared<ImageFont>(
 		"font-large.png",
@@ -58,13 +77,14 @@ int main() {
 
 		text.update(elapsed);
 		p.update(elapsed);
-		other.update(elapsed);
+		// other.update(elapsed);
 
 		window.clear();
 		window.draw(text);
 		window.draw(p);
-		window.draw(other);
+		// window.draw(other);
 		window.display();
 	}
 
+	return 0;
 }
