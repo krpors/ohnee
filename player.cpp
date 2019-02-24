@@ -3,12 +3,18 @@
 
 #include "player.hpp"
 
-
 Player::Player() {
 }
 
 Player::~Player() {
 
+}
+
+bool Player::collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, int radius2) const {
+	float dx = pos2.x - pos1.x;
+	float dy = pos2.y - pos1.y;
+	float dist = std::sqrt(dx * dx + dy * dy);
+	return dist < (radius1 + radius2);
 }
 
 void Player::setStartingPoint(int x, int y, float angle) {
@@ -22,21 +28,24 @@ void Player::setColor(const sf::Color& color) {
 	this->color = color;
 }
 
-bool Player::isColliding(const Player& other) const {
-	// check ourselves first
-	if (&other == this) {
-		// Do not check for all previous positions or we would collide with
-		// ourselves right away. Instead. we iterate from start to end - 10.
-		std::vector<sf::Vector2f>::size_type tosubtract = 10;
-		if (this->positions.size() < tosubtract) {
-			tosubtract = this->positions.size();
-		}
-		for (auto it = this->positions.begin(); it != this->positions.end() - tosubtract; it++) {
-			// std::cout << "checking position " << it->x << std::endl;
-			// TODO: pythagorean theorem to check current player circle with path.
+bool Player::isCollidingWithSelf() const {
+	// Do not check for all previous positions or we would collide with
+	// ourselves right away. Instead. we iterate from start to end - 10.
+	std::vector<sf::Vector2f>::size_type tosubtract = 10;
+	if (this->positions.size() < tosubtract) {
+		tosubtract = this->positions.size();
+	}
+
+	for (auto it = this->positions.begin(); it != this->positions.end() - tosubtract; it++) {
+		if (this->collides(this->pos, this->radius, *it, this->radius)) {
+			return true;
 		}
 	}
 
+	return false;
+}
+
+bool Player::isColliding(const Player& other) const {
 	// std::cout << std::endl;
 	return false;
 }
@@ -88,22 +97,13 @@ void Player::update(const sf::Time& dt) {
 		this->distanceTravelled = 0.0f;
 	}
 
-	this->isColliding(*this);
+	this->hit = false;
+	if (this->isCollidingWithSelf()) {
+		this->hit = true;
+	}
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	sf::CircleShape shape;
-	shape.setRadius(this->radius);
-	shape.setPosition(this->pos);
-	shape.setFillColor(this->color);
-
-	target.draw(shape, states);
-
-	sf::VertexArray varr(sf::Points);
-	varr.append(sf::Vertex(this->pos, sf::Color::Yellow));
-
-	target.draw(varr, states);
-
 	// Draw the path of the player
 	for (const sf::Vector2f& p : this->positions) {
 		sf::CircleShape a;
@@ -112,4 +112,21 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 		a.setFillColor(this->color);
 		target.draw(a, states);
 	}
+
+	sf::Color c = sf::Color::Blue;
+	if (this->hit) {
+		c = sf::Color::Red;
+	}
+
+	sf::CircleShape shape;
+	shape.setRadius(this->radius);
+	shape.setPosition(this->pos);
+	shape.setFillColor(c);
+
+	target.draw(shape, states);
+
+	sf::VertexArray varr(sf::Points);
+	varr.append(sf::Vertex(this->pos, sf::Color::Yellow));
+
+	target.draw(varr, states);
 }

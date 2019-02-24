@@ -9,14 +9,20 @@ private:
 
 	float distanceTravelled = 0.0f;
 
+	bool hit = false;
+
 	sf::Vector2f pos;
 	int radius = 10;
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
-	sf::Color color = sf::Color::Red;
+	sf::Color color = sf::Color::Blue;
 
 	bool moveLeft = false;
 	bool moveRight = false;
+
+	bool collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, int radius2) const;
+
+	bool isCollidingWithSelf() const;
 public:
 	Player();
 	~Player();

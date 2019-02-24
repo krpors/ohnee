@@ -39,10 +39,6 @@ int main() {
 
 	Player p;
 
-	Player other;
-	other.setColor(sf::Color::Cyan);
-	other.setStartingPoint(150, 150, 20.0f);
-
 	sf::ContextSettings ctx;
 	ctx.antialiasingLevel = 4;
 	sf::RenderWindow window(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close, ctx);
@@ -77,12 +73,11 @@ int main() {
 
 		text.update(elapsed);
 		p.update(elapsed);
-		// other.update(elapsed);
 
 		window.clear();
-		window.draw(text);
+		// window.draw(text);
 		window.draw(p);
-		// window.draw(other);
+
 		window.display();
 	}
 
