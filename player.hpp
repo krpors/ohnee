@@ -9,10 +9,12 @@ private:
 
 	float distanceTravelled = 0.0f;
 
+	int gapcounter = 0;
+
 	bool hit = false;
 
 	sf::Vector2f pos;
-	int radius = 10;
+	int radius = 5;
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
 	sf::Color color = sf::Color::Blue;

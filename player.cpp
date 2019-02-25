@@ -70,21 +70,39 @@ void Player::update(const sf::Time& dt) {
 	t += dt;
 
 	if (this->moveLeft) {
-		this->angle -= 140 * dt.asSeconds();
+		this->angle -= 240 * dt.asSeconds();
 	}
 	if (this->moveRight) {
-		this->angle += 140 * dt.asSeconds();
+		this->angle += 240 * dt.asSeconds();
 	}
 
 	float bleh = M_PI / 180.0f;
 
-	float dx = std::cos(this->angle * bleh) * 120 * dt.asSeconds();
-	float dy = std::sin(this->angle * bleh) * 120 * dt.asSeconds();
+	float speed = 100;
+	float dx = std::cos(this->angle * bleh) * speed * dt.asSeconds();
+	float dy = std::sin(this->angle * bleh) * speed * dt.asSeconds();
 
 	pos.x += dx;
 	pos.y += dy;
 
-	int threshold = this->radius / 3; // in pixels
+	// If we're moving left/right and moving out of bounds...
+	if (dx < 0 && pos.x < -this->radius) {
+		pos.x = 800;
+	}
+	if (dx > 0 && pos.x + this->radius > 800) {
+		pos.x = -this->radius;
+	}
+	// If we're moving up/down and going out of bounds of the screen...
+	if (dy < 0 && pos.y < -this->radius) {
+		pos.y = 600;
+	}
+	if (dy > 0 && pos.y + this->radius > 600) {
+		pos.y = -this->radius;
+	}
+
+	// TODO: the threshold doesn't exactly work like we want to if the dx and
+	// dy is too large. We will see gaps instead.
+	float threshold = this->radius / 3; // in pixels
 
 	// Calculate the distance travelled by adding the delta x and y
 	this->distanceTravelled += std::fabs(dx) + std::fabs(dy);
@@ -93,9 +111,15 @@ void Player::update(const sf::Time& dt) {
 	// to the history of positions so we can draw the path we travelled later on.
 	// This is more of an optimization step rather than a visual step.
 	if (this->distanceTravelled > threshold) {
-		this->positions.emplace_back(pos);
-		this->distanceTravelled = 0.0f;
+		if (this->gapcounter < 80) {
+			this->positions.emplace_back(pos);
+			this->distanceTravelled = 0.0f;
+		} else if (this->gapcounter > 100) {
+			this->gapcounter = 0;
+		}
 	}
+
+	this->gapcounter++;
 
 	this->hit = false;
 	if (this->isCollidingWithSelf()) {
