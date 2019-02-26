@@ -29,6 +29,7 @@ void Player::setColor(const sf::Color& color) {
 }
 
 bool Player::isCollidingWithSelf() const {
+	std::cout << this->positions.size() << std::endl;
 	// Do not check for all previous positions or we would collide with
 	// ourselves right away. Instead. we iterate from start to end - 10.
 	std::vector<sf::Vector2f>::size_type tosubtract = 10;
@@ -68,6 +69,7 @@ void Player::handleInput(const sf::Event& event) {
 
 void Player::update(const sf::Time& dt) {
 	t += dt;
+	this->emplacementCounter += dt;
 
 	if (this->moveLeft) {
 		this->angle -= 240 * dt.asSeconds();
@@ -78,7 +80,7 @@ void Player::update(const sf::Time& dt) {
 
 	float bleh = M_PI / 180.0f;
 
-	float speed = 100;
+	float speed = 200;
 	float dx = std::cos(this->angle * bleh) * speed * dt.asSeconds();
 	float dy = std::sin(this->angle * bleh) * speed * dt.asSeconds();
 
@@ -101,25 +103,23 @@ void Player::update(const sf::Time& dt) {
 	}
 
 	// TODO: the threshold doesn't exactly work like we want to if the dx and
-	// dy is too large. We will see gaps instead.
+	// dy is too large. We will see gaps instead. We probably need to calculate
+	// the diff between the previous and new position, and see if we need to add
+	// extra circles etc.
 	float threshold = this->radius / 3; // in pixels
 
 	// Calculate the distance travelled by adding the delta x and y
 	this->distanceTravelled += std::fabs(dx) + std::fabs(dy);
 
-	// if the distance travelled exceeds the threshold, add the current position
-	// to the history of positions so we can draw the path we travelled later on.
-	// This is more of an optimization step rather than a visual step.
-	if (this->distanceTravelled > threshold) {
-		if (this->gapcounter < 80) {
+	if (this->emplacementCounter > sf::milliseconds(10)) {
+		if (this->t < sf::milliseconds(2000)) {
 			this->positions.emplace_back(pos);
-			this->distanceTravelled = 0.0f;
-		} else if (this->gapcounter > 100) {
-			this->gapcounter = 0;
+		} else if (this->t > sf::milliseconds(2200)) {
+			this->t = sf::Time::Zero;
 		}
-	}
 
-	this->gapcounter++;
+		this->emplacementCounter = sf::Time::Zero;
+	}
 
 	this->hit = false;
 	if (this->isCollidingWithSelf()) {

@@ -19,6 +19,14 @@ private:
 	sf::Time t = sf::Time::Zero;
 	sf::Color color = sf::Color::Blue;
 
+	/**
+	 * The emplacement counter is used to determine when to add a new position
+	 * vector to the `positions` vector. This is to prevent adding too many
+	 * items in the vector because it's not really necessary for collision checking
+	 * and trail drawing.
+	 */
+	sf::Time emplacementCounter = sf::Time::Zero;
+
 	bool moveLeft = false;
 	bool moveRight = false;
 
