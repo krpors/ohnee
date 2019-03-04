@@ -14,17 +14,32 @@ Arrow::Arrow() {
 	sf::Vertex rightStart({ 20, 0 }, sf::Color::Red);
 	sf::Vertex rightEnd  ({ 15, 5 }, sf::Color::Red);
 
-	this->varr.append(arrowBaseStart);
-	this->varr.append(arrowBaseEnd);
+	// this->varr.append(arrowBaseStart);
+	// this->varr.append(arrowBaseEnd);
 
 	this->varr.append(leftStart);
 	this->varr.append(leftEnd);
 
 	this->varr.append(rightStart);
 	this->varr.append(rightEnd);
+
+	// Double arrow!
+	this->varr.append(sf::Vertex({ 22, 0 }, sf::Color::Red));
+	this->varr.append(sf::Vertex({ 17, -5 }, sf::Color::Red));
+
+	this->varr.append(sf::Vertex({ 22, 0 }, sf::Color::Red));
+	this->varr.append(sf::Vertex({ 17, 5 }, sf::Color::Red));
+
+	setOrigin(6, 0);
 }
 
 Arrow::~Arrow() {
+}
+
+void Arrow::update(const sf::Time& dt) {
+	this->timer += dt;
+	float scale = std::fabs(1 * std::sin(2 * M_PI * this->timer.asSeconds())) + 1;
+	this->setScale(scale, scale);
 }
 
 void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -158,6 +173,7 @@ void Player::update(const sf::Time& dt) {
 		this->hit = true;
 	}
 
+	this->arrow.update(dt);
 	this->arrow.setPosition(pos.x + this->radius, pos.y + this->radius);
 	this->arrow.setRotation(this->angle);
 }

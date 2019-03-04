@@ -5,11 +5,13 @@
 
 class Arrow : public sf::Drawable, public sf::Transformable {
 private:
+	sf::Time timer;
 	sf::VertexArray varr;
 public:
 	Arrow();
 	~Arrow();
 
+	void update(const sf::Time& dt);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
