@@ -3,7 +3,45 @@
 
 #include "player.hpp"
 
+Arrow::Arrow() {
+	this->varr.setPrimitiveType(sf::Lines);
+	sf::Vertex arrowBaseStart({ 0,  0 }, sf::Color::Red);
+	sf::Vertex arrowBaseEnd  ({ 20, 0 }, sf::Color::Red);
+
+	sf::Vertex leftStart({ 20,  0 }, sf::Color::Red);
+	sf::Vertex leftEnd  ({ 15, -5 }, sf::Color::Red);
+
+	sf::Vertex rightStart({ 20, 0 }, sf::Color::Red);
+	sf::Vertex rightEnd  ({ 15, 5 }, sf::Color::Red);
+
+	this->varr.append(arrowBaseStart);
+	this->varr.append(arrowBaseEnd);
+
+	this->varr.append(leftStart);
+	this->varr.append(leftEnd);
+
+	this->varr.append(rightStart);
+	this->varr.append(rightEnd);
+}
+
+Arrow::~Arrow() {
+}
+
+void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	states.transform *= this->getTransform();
+	target.draw(this->varr, states);
+}
+
+//==============================================================================
+
 Player::Player() {
+	this->rng.seed(std::random_device()());
+	this->dist = std::uniform_real_distribution<>(0, 1.0);
+
+	float startx = this->dist(this->rng) * 800;
+	float starty = this->dist(this->rng) * 600;
+	float angle =  this->dist(this->rng) * 360;
+	this->setStartingPoint(startx, starty, angle);
 }
 
 Player::~Player() {
@@ -29,7 +67,6 @@ void Player::setColor(const sf::Color& color) {
 }
 
 bool Player::isCollidingWithSelf() const {
-	std::cout << this->positions.size() << std::endl;
 	// Do not check for all previous positions or we would collide with
 	// ourselves right away. Instead. we iterate from start to end - 10.
 	std::vector<sf::Vector2f>::size_type tosubtract = 10;
@@ -106,11 +143,6 @@ void Player::update(const sf::Time& dt) {
 	// dy is too large. We will see gaps instead. We probably need to calculate
 	// the diff between the previous and new position, and see if we need to add
 	// extra circles etc.
-	float threshold = this->radius / 3; // in pixels
-
-	// Calculate the distance travelled by adding the delta x and y
-	this->distanceTravelled += std::fabs(dx) + std::fabs(dy);
-
 	if (this->emplacementCounter > sf::milliseconds(10)) {
 		if (this->t < sf::milliseconds(2000)) {
 			this->positions.emplace_back(pos);
@@ -125,6 +157,9 @@ void Player::update(const sf::Time& dt) {
 	if (this->isCollidingWithSelf()) {
 		this->hit = true;
 	}
+
+	this->arrow.setPosition(pos.x + this->radius, pos.y + this->radius);
+	this->arrow.setRotation(this->angle);
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -146,11 +181,8 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	shape.setRadius(this->radius);
 	shape.setPosition(this->pos);
 	shape.setFillColor(c);
-
 	target.draw(shape, states);
 
-	sf::VertexArray varr(sf::Points);
-	varr.append(sf::Vertex(this->pos, sf::Color::Yellow));
-
-	target.draw(varr, states);
+	// draw direction arrow
+	target.draw(arrow, states);
 }

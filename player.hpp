@@ -1,15 +1,26 @@
+#include <random>
 #include <vector>
 
 #include <SFML/Graphics.hpp>
 
+class Arrow : public sf::Drawable, public sf::Transformable {
+private:
+	sf::VertexArray varr;
+public:
+	Arrow();
+	~Arrow();
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+};
+
 class Player : public sf::Drawable {
 private:
+	std::mt19937 rng;
+	std::uniform_real_distribution<> dist;
+
+	Arrow arrow;
 
 	std::vector<sf::Vector2f> positions;
-
-	float distanceTravelled = 0.0f;
-
-	int gapcounter = 0;
 
 	bool hit = false;
 
