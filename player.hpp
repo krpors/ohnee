@@ -23,7 +23,7 @@ private:
 	bool drawArrow = true;
 	Arrow arrow;
 
-	std::vector<sf::Vector2f> positions;
+	std::vector<sf::CircleShape> positions;
 
 	bool hit = false;
 

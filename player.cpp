@@ -90,7 +90,7 @@ bool Player::isCollidingWithSelf() const {
 	}
 
 	for (auto it = this->positions.begin(); it != this->positions.end() - tosubtract; it++) {
-		if (this->collides(this->pos, this->radius, *it, this->radius)) {
+		if (this->collides(this->pos, this->radius, it->getPosition(), this->radius)) {
 			return true;
 		}
 	}
@@ -163,7 +163,14 @@ void Player::update(const sf::Time& dt) {
 		this->drawArrow = false;
 
 		if (this->t < sf::milliseconds(2000)) {
-			this->positions.emplace_back(pos);
+			// As a poor man's optimalization technique, I prematurely create the
+			// circleshapes to draw instead of adding the pure positions. This prevents
+			// a lot of constructing in the draw() method.
+			sf::CircleShape shape;
+			shape.setFillColor(sf::Color::Blue);
+			shape.setPosition(this->pos);
+			shape.setRadius(this->radius);
+			this->positions.push_back(shape);
 		} else if (this->t > sf::milliseconds(2200)) {
 			this->t = sf::Time::Zero;
 		}
@@ -185,12 +192,8 @@ void Player::update(const sf::Time& dt) {
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	// Draw the path of the player
-	for (const sf::Vector2f& p : this->positions) {
-		sf::CircleShape a;
-		a.setRadius(this->radius);
-		a.setPosition(p.x, p.y);
-		a.setFillColor(this->color);
-		target.draw(a, states);
+	for (const sf::CircleShape& p : this->positions) {
+		target.draw(p, states);
 	}
 
 	sf::Color c = sf::Color::Blue;
