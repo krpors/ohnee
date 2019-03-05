@@ -68,6 +68,7 @@ int main() {
 		}
 
 		if (paused) {
+			window.display();
 			continue;
 		}
 

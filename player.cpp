@@ -120,7 +120,8 @@ void Player::handleInput(const sf::Event& event) {
 }
 
 void Player::update(const sf::Time& dt) {
-	t += dt;
+	this->t += dt;
+	this->totalTime += dt;
 	this->emplacementCounter += dt;
 
 	if (this->moveLeft) {
@@ -136,29 +137,31 @@ void Player::update(const sf::Time& dt) {
 	float dx = std::cos(this->angle * bleh) * speed * dt.asSeconds();
 	float dy = std::sin(this->angle * bleh) * speed * dt.asSeconds();
 
-	pos.x += dx;
-	pos.y += dy;
+	this->pos.x += dx;
+	this->pos.y += dy;
 
 	// If we're moving left/right and moving out of bounds...
-	if (dx < 0 && pos.x < -this->radius) {
-		pos.x = 800;
+	if (dx < 0 && this->pos.x < -this->radius) {
+		this->pos.x = 800;
 	}
-	if (dx > 0 && pos.x + this->radius > 800) {
-		pos.x = -this->radius;
+	if (dx > 0 && this->pos.x + this->radius > 800) {
+		this->pos.x = -this->radius;
 	}
 	// If we're moving up/down and going out of bounds of the screen...
-	if (dy < 0 && pos.y < -this->radius) {
-		pos.y = 600;
+	if (dy < 0 && this->pos.y < -this->radius) {
+		this->pos.y = 600;
 	}
-	if (dy > 0 && pos.y + this->radius > 600) {
-		pos.y = -this->radius;
+	if (dy > 0 && this->pos.y + this->radius > 600) {
+		this->pos.y = -this->radius;
 	}
 
 	// TODO: the threshold doesn't exactly work like we want to if the dx and
 	// dy is too large. We will see gaps instead. We probably need to calculate
 	// the diff between the previous and new position, and see if we need to add
 	// extra circles etc.
-	if (this->emplacementCounter > sf::milliseconds(10)) {
+	if (this->emplacementCounter > sf::milliseconds(10) && this->totalTime > this->startAfter) {
+		this->drawArrow = false;
+
 		if (this->t < sf::milliseconds(2000)) {
 			this->positions.emplace_back(pos);
 		} else if (this->t > sf::milliseconds(2200)) {
@@ -173,9 +176,11 @@ void Player::update(const sf::Time& dt) {
 		this->hit = true;
 	}
 
-	this->arrow.update(dt);
-	this->arrow.setPosition(pos.x + this->radius, pos.y + this->radius);
-	this->arrow.setRotation(this->angle);
+	if (this->drawArrow) {
+		this->arrow.update(dt);
+		this->arrow.setPosition(pos.x + this->radius, pos.y + this->radius);
+		this->arrow.setRotation(this->angle);
+	}
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -200,5 +205,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(shape, states);
 
 	// draw direction arrow
-	target.draw(arrow, states);
+	if (this->drawArrow) {
+		target.draw(arrow, states);
+	}
 }

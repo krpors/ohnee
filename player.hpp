@@ -20,6 +20,7 @@ private:
 	std::mt19937 rng;
 	std::uniform_real_distribution<> dist;
 
+	bool drawArrow = true;
 	Arrow arrow;
 
 	std::vector<sf::Vector2f> positions;
@@ -31,6 +32,9 @@ private:
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
 	sf::Color color = sf::Color::Blue;
+
+	sf::Time totalTime = sf::Time::Zero; // The total time.
+	sf::Time startAfter = sf::seconds(5); // the time when the actual trail starts.
 
 	/**
 	 * The emplacement counter is used to determine when to add a new position
