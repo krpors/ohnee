@@ -7,6 +7,7 @@ sources = $(wildcard *.cpp)
 objects = $(patsubst %.cpp,%.o,$(sources))
 
 all: main
+all: CPPFLAGS = -DNDEBUG
 all: CXXFLAGS += -Werror
 main: $(objects)
 

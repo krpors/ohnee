@@ -8,25 +8,7 @@
 #include "bob.hpp"
 #include "text.hpp"
 #include "player.hpp"
-
-int main_() {
-	std::vector<int> vec;
-	for (int i = 0; i < 50; i++) {
-		vec.push_back(i);
-	}
-
-	std::cout << vec.size() << std::endl;
-
-	std::vector<int>::size_type sz = 10;
-	if (vec.size() < sz) {
-		sz = vec.size();
-	}
-	for(auto it = vec.begin(); it != vec.end() - sz; it++) {
-		std::cout << *it << std::endl;
-	}
-
-	return 0;
-}
+#include "util.hpp"
 
 int main() {
 	std::shared_ptr<ImageFont> font = std::make_shared<ImageFont>(
@@ -34,6 +16,10 @@ int main() {
 		" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?"
 	);
 	font->setKerning(2);
+
+	ParticleGenerator pgen;
+	FpsCounter fps;
+	Text fpsText(font);
 
 	BobbingText text(font);
 
@@ -72,12 +58,20 @@ int main() {
 			continue;
 		}
 
+		std::stringstream ss;
+		ss << "FPS: " << fps.getFps();
+		fpsText.setText(ss.str());
+
+		fps.update(elapsed);
 		text.update(elapsed);
 		p.update(elapsed);
+		pgen.update(elapsed);
 
 		window.clear();
 		// window.draw(text);
 		window.draw(p);
+		window.draw(fpsText);
+		window.draw(pgen);
 
 		window.display();
 	}

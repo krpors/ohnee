@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -125,7 +126,7 @@ void Text::setFont(const std::shared_ptr<ImageFont>& font) {
 }
 
 void Text::initializeVertexArray() {
-	// TODO there is still a bug with the small glyphs
+	assert(this->font != nullptr);
 
 	this->varray.clear();
 	this->varray.setPrimitiveType(sf::Quads);
@@ -178,9 +179,11 @@ void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 	target.draw(this->varray, states);
 
+#ifndef NDEBUG
 	sf::CircleShape pos;
 	pos.setRadius(2.0f);
 	pos.setFillColor(sf::Color::Red);
 	pos.setPosition(getPosition());
 	target.draw(pos);
+#endif
 }

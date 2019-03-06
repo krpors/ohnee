@@ -50,7 +50,5 @@ void BobbingText::handleInput(const sf::Event& event) {
 void BobbingText::update(const sf::Time& dt) {
 	this->timer += dt.asSeconds();
 	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
-	float r = 20.0f * cos(3.14f * this->timer);
 	setScale(f, f);
-	// setRotation(r);
 }
