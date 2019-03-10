@@ -12,7 +12,7 @@
 
 int main() {
 	std::shared_ptr<ImageFont> font = std::make_shared<ImageFont>(
-		"font-large.png",
+		"font.png",
 		" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?"
 	);
 	font->setKerning(2);
