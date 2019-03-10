@@ -19,11 +19,16 @@ int main() {
 
 	ParticleGenerator pgen;
 	FpsCounter fps;
+
 	Text fpsText(font);
+	Text playerText(font);
+	playerText.setPosition(0, 40);
 
 	BobbingText text(font);
 
 	Player p;
+
+	BlastGenerator blastGenerator;
 
 	sf::ContextSettings ctx;
 	ctx.antialiasingLevel = 4;
@@ -44,6 +49,7 @@ int main() {
 			if (event.type == sf::Event::KeyPressed) {
 				switch (event.key.code) {
 				case sf::Keyboard::Escape: window.close(); break;
+				case sf::Keyboard::L: blastGenerator.init(p); break;
 				case sf::Keyboard::Space: paused = !paused; break;
 				default: break;
 				}
@@ -53,25 +59,24 @@ int main() {
 			text.handleInput(event);
 		}
 
-		if (paused) {
-			window.display();
-			continue;
+		if (!paused) {
+			fps.update(elapsed);
+			text.update(elapsed);
+			p.update(elapsed);
+			pgen.update(elapsed);
+			blastGenerator.update(elapsed);
 		}
 
 		std::stringstream ss;
 		ss << "FPS: " << fps.getFps();
 		fpsText.setText(ss.str());
-
-		fps.update(elapsed);
-		text.update(elapsed);
-		p.update(elapsed);
-		pgen.update(elapsed);
+		playerText.setText(p.str());
 
 		window.clear();
-		// window.draw(text);
 		window.draw(p);
 		window.draw(fpsText);
-		window.draw(pgen);
+		window.draw(playerText);
+		window.draw(blastGenerator);
 
 		window.display();
 	}

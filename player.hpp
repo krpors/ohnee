@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
+class Player; // forward decl
+
+
 class Arrow : public sf::Drawable, public sf::Transformable {
 private:
 	sf::Time timer;
@@ -15,6 +18,50 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
+// =============================================================================
+
+class BlastParticle : public sf::CircleShape {
+private:
+	sf::Time life = sf::seconds(2);
+
+	sf::Time maxlife = sf::seconds(2);
+	float maxradius;
+	float speed = 100.0f;
+	float size = 10.0f;
+	float angle = 0.0f;
+public:
+	BlastParticle();
+	~BlastParticle();
+
+	void init(float speed, float angle, float maxradius, const sf::Time& maxlife);
+	void update(const sf::Time& dt);
+};
+
+/**
+ * This will generate a 'blast' when a player dies. It's a specific particle
+ * generator.
+ */
+class BlastGenerator : public sf::Drawable {
+private:
+	sf::Time time;
+
+	std::mt19937 rng;
+	std::uniform_real_distribution<> dist;
+	std::uniform_real_distribution<> dist2;
+
+	std::vector<BlastParticle> particles;
+
+public:
+	BlastGenerator();
+	~BlastGenerator();
+
+	void init(const Player& p);
+	void update(const sf::Time& dt);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+};
+
+// =============================================================================
+
 class Player : public sf::Drawable {
 private:
 	std::mt19937 rng;
@@ -25,7 +72,7 @@ private:
 
 	std::vector<sf::CircleShape> positions;
 
-	bool hit = false;
+	bool dead = false;
 
 	sf::Vector2f pos;
 	int radius = 5;
@@ -34,7 +81,13 @@ private:
 	sf::Color color = sf::Color::Blue;
 
 	sf::Time totalTime = sf::Time::Zero; // The total time.
-	sf::Time startAfter = sf::seconds(5); // the time when the actual trail starts.
+	sf::Time startAfter = sf::seconds(1); // the time when the actual trail starts.
+
+	/**
+	 * The blast generator is just a particle generator which emits some particles
+	 * using the same angle of the player upon death.
+	 */
+	BlastGenerator blastGenerator;
 
 	/**
 	 * The emplacement counter is used to determine when to add a new position
@@ -54,6 +107,9 @@ public:
 	Player();
 	~Player();
 
+	const sf::Vector2f& getPosition() const;
+
+	float getAngle() const;
 	void setStartingPoint(int x, int y, float angle);
 	void setColor(const sf::Color& color);
 	bool isColliding(const Player& other) const;
@@ -61,4 +117,5 @@ public:
 	void update(const sf::Time& delta);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+	const std::string str() const;
 };

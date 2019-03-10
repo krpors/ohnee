@@ -1,5 +1,6 @@
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <sstream>
 
 #include "player.hpp"
 
@@ -49,6 +50,92 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 //==============================================================================
 
+BlastParticle::BlastParticle() {
+	sf::CircleShape::setPosition(20, 20);
+}
+
+BlastParticle::~BlastParticle() {
+}
+
+void BlastParticle::init(float speed, float angle, float radius, const sf::Time& maxlife) {
+	this->speed     = speed;
+	this->angle     = angle;
+	this->maxradius = radius;
+
+	// life is decremented per frame, maxlife is not.
+	this->life      = maxlife;
+	this->maxlife   = maxlife;
+}
+
+void BlastParticle::update(const sf::Time& dt) {
+	this->life -= dt;
+	if (this->life <= sf::Time::Zero) {
+		return;
+	}
+
+
+	float percentageLife = this->life / this->maxlife;
+
+	float rad = M_PI / 180.0f;
+
+	float dx = std::cos(this->angle * rad) * this->speed * dt.asSeconds();
+	float dy = std::sin(this->angle * rad) * this->speed * dt.asSeconds();
+
+	sf::Vector2f curpos = sf::CircleShape::getPosition();
+	sf::CircleShape::setPosition(curpos.x + dx, curpos.y + dy);
+	sf::CircleShape::setRadius(this->maxradius * percentageLife);
+}
+
+//==============================================================================
+
+BlastGenerator::BlastGenerator() {
+	// TODO: investigate the usage of only two or three RNG/Dists in an application,
+	// like a global var.
+	this->rng.seed(std::random_device()());
+	this->dist  = std::uniform_real_distribution<>(-1.0, 1.0);
+	this->dist2 = std::uniform_real_distribution<>(0.0, 1.0);
+
+}
+
+BlastGenerator::~BlastGenerator() {
+}
+
+void BlastGenerator::init(const Player& player) {
+	this->particles.clear();
+	for (int i = 0; i < 80; i++) {
+		BlastParticle p;
+		p.setPosition(player.getPosition());
+		p.setFillColor(sf::Color::Blue);
+
+		sf::Time maxlife = sf::milliseconds(this->dist2(this->rng) * 2000);
+		float speed = 200.0f * this->dist2(this->rng) + 100;
+		float pangle = this->dist(this->rng) * 20 + player.getAngle();
+		float radius = 5 * this->dist2(this->rng) + 1;
+
+		std::clog << maxlife.asSeconds() << std::endl;
+
+		p.init(speed, pangle, radius, maxlife);
+		// TODO: get the direction of the player, and set a vector of each
+		// particle to go that sort of random way.
+		this->particles.push_back(p);
+	}
+}
+
+void BlastGenerator::update(const sf::Time& dt) {
+	this->time += dt;
+	for (BlastParticle& p : this->particles) {
+		p.update(dt);
+	}
+}
+
+void BlastGenerator::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	for (const BlastParticle& p : this->particles) {
+		target.draw(p, states);
+	}
+}
+
+//==============================================================================
+
 Player::Player() {
 	this->rng.seed(std::random_device()());
 	this->dist = std::uniform_real_distribution<>(0, 1.0);
@@ -68,6 +155,14 @@ bool Player::collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, i
 	float dy = pos2.y - pos1.y;
 	float dist = std::sqrt(dx * dx + dy * dy);
 	return dist < (radius1 + radius2);
+}
+
+const sf::Vector2f& Player::getPosition() const {
+	return this->pos;
+}
+
+float Player::getAngle() const {
+	return this->angle;
 }
 
 void Player::setStartingPoint(int x, int y, float angle) {
@@ -124,6 +219,12 @@ void Player::update(const sf::Time& dt) {
 	this->totalTime += dt;
 	this->emplacementCounter += dt;
 
+	if (this->dead) {
+		// only update the death anim when dead.
+		blastGenerator.update(dt);
+		return;
+	}
+
 	if (this->moveLeft) {
 		this->angle -= 240 * dt.asSeconds();
 	}
@@ -178,9 +279,10 @@ void Player::update(const sf::Time& dt) {
 		this->emplacementCounter = sf::Time::Zero;
 	}
 
-	this->hit = false;
+	this->dead = false;
 	if (this->isCollidingWithSelf()) {
-		this->hit = true;
+		this->dead = true;
+		blastGenerator.init(*this);
 	}
 
 	if (this->drawArrow) {
@@ -197,8 +299,8 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	}
 
 	sf::Color c = sf::Color::Blue;
-	if (this->hit) {
-		c = sf::Color::Red;
+	if (this->dead) {
+		target.draw(blastGenerator, states);
 	}
 
 	sf::CircleShape shape;
@@ -211,4 +313,14 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	if (this->drawArrow) {
 		target.draw(arrow, states);
 	}
+}
+
+const std::string Player::str() const {
+	float anglerads = this->angle * M_PI / 180.0f;
+	std::stringstream ss;
+	ss << "Player at " << this->pos.x << ", " << this->pos.y << std::endl;
+	ss << "Angle: " << this->angle << " deg, " << anglerads << " rad" << std::endl;
+	ss << "  dx: " << std::cos(anglerads) << std::endl;
+	ss << "  dy: " << std::sin(anglerads) << std::endl;
+	return ss.str();
 }
