@@ -50,21 +50,16 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 //==============================================================================
 
-BlastParticle::BlastParticle() {
+BlastParticle::BlastParticle(float speed, float angle, float radius, const sf::Time& maxlife) :
+		speed(speed),
+		angle(angle),
+		maxradius(radius),
+		maxlife(maxlife),
+		life(maxlife) {
 	sf::CircleShape::setPosition(20, 20);
 }
 
 BlastParticle::~BlastParticle() {
-}
-
-void BlastParticle::init(float speed, float angle, float radius, const sf::Time& maxlife) {
-	this->speed     = speed;
-	this->angle     = angle;
-	this->maxradius = radius;
-
-	// life is decremented per frame, maxlife is not.
-	this->life      = maxlife;
-	this->maxlife   = maxlife;
 }
 
 void BlastParticle::update(const sf::Time& dt) {
@@ -72,7 +67,6 @@ void BlastParticle::update(const sf::Time& dt) {
 	if (this->life <= sf::Time::Zero) {
 		return;
 	}
-
 
 	float percentageLife = this->life / this->maxlife;
 
@@ -103,20 +97,15 @@ BlastGenerator::~BlastGenerator() {
 void BlastGenerator::init(const Player& player) {
 	this->particles.clear();
 	for (int i = 0; i < 80; i++) {
-		BlastParticle p;
-		p.setPosition(player.getPosition());
-		p.setFillColor(sf::Color::Blue);
-
 		sf::Time maxlife = sf::milliseconds(this->dist2(this->rng) * 2000);
 		float speed = 200.0f * this->dist2(this->rng) + 100;
 		float pangle = this->dist(this->rng) * 20 + player.getAngle();
 		float radius = 5 * this->dist2(this->rng) + 1;
 
-		std::clog << maxlife.asSeconds() << std::endl;
+		BlastParticle p(speed, pangle, radius, maxlife);
+		p.setPosition(player.getPosition());
+		p.setFillColor(sf::Color::Blue);
 
-		p.init(speed, pangle, radius, maxlife);
-		// TODO: get the direction of the player, and set a vector of each
-		// particle to go that sort of random way.
 		this->particles.push_back(p);
 	}
 }

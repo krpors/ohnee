@@ -22,15 +22,13 @@ public:
 
 class BlastParticle : public sf::CircleShape {
 private:
-	sf::Time life = sf::seconds(2);
-
-	sf::Time maxlife = sf::seconds(2);
-	float maxradius;
 	float speed = 100.0f;
-	float size = 10.0f;
 	float angle = 0.0f;
+	float maxradius;
+	sf::Time maxlife = sf::seconds(2);
+	sf::Time life = sf::seconds(2);
 public:
-	BlastParticle();
+	BlastParticle(float speed, float angle, float maxradius, const sf::Time& maxlife);
 	~BlastParticle();
 
 	void init(float speed, float angle, float maxradius, const sf::Time& maxlife);
