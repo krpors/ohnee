@@ -79,8 +79,21 @@ void BlastParticle::update(const sf::Time& dt) {
 	float dx = std::cos(this->angle * rad) * this->speed * dt.asSeconds();
 	float dy = std::sin(this->angle * rad) * this->speed * dt.asSeconds();
 
-	sf::Vector2f curpos = sf::CircleShape::getPosition();
-	sf::CircleShape::setPosition(curpos.x + dx, curpos.y + dy);
+	sf::Vector2f newpos = sf::CircleShape::getPosition();
+	if (newpos.x < 0 && dx < 0) {
+		newpos.x = 800;
+	} else if (newpos.x > 800 && dx > 0) {
+		newpos.x = 0;
+	} else if (newpos.y < 0 && dy < 0) {
+		newpos.y = 600;
+	} else if (newpos.y > 600 && dy > 0) {
+		newpos.y = 0;
+	} else {
+		newpos.x += dx;
+		newpos.y += dy;
+	}
+
+	sf::CircleShape::setPosition(newpos.x, newpos.y);
 	sf::CircleShape::setRadius(this->maxradius * percentageLife);
 }
 
