@@ -62,6 +62,10 @@ BlastParticle::BlastParticle(float speed, float angle, float radius, const sf::T
 BlastParticle::~BlastParticle() {
 }
 
+bool BlastParticle::isAlive() const {
+	return this->life > sf::Time::Zero;
+}
+
 void BlastParticle::update(const sf::Time& dt) {
 	this->life -= dt;
 	if (this->life <= sf::Time::Zero) {
@@ -98,13 +102,13 @@ void BlastGenerator::init(const Player& player) {
 	this->particles.clear();
 	for (int i = 0; i < 80; i++) {
 		sf::Time maxlife = sf::milliseconds(this->dist2(this->rng) * 2000);
-		float speed = 200.0f * this->dist2(this->rng) + 100;
+		float speed = 200.0f * this->dist2(this->rng);
 		float pangle = this->dist(this->rng) * 20 + player.getAngle();
 		float radius = 5 * this->dist2(this->rng) + 1;
 
 		BlastParticle p(speed, pangle, radius, maxlife);
 		p.setPosition(player.getPosition());
-		p.setFillColor(sf::Color::Blue);
+		p.setFillColor(player.getColor());
 
 		this->particles.push_back(p);
 	}
@@ -119,7 +123,9 @@ void BlastGenerator::update(const sf::Time& dt) {
 
 void BlastGenerator::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	for (const BlastParticle& p : this->particles) {
-		target.draw(p, states);
+		if (p.isAlive()) {
+			target.draw(p, states);
+		}
 	}
 }
 
@@ -163,6 +169,10 @@ void Player::setStartingPoint(int x, int y, float angle) {
 
 void Player::setColor(const sf::Color& color) {
 	this->color = color;
+}
+
+const sf::Color& Player::getColor() const {
+	return this->color;
 }
 
 bool Player::isCollidingWithSelf() const {
@@ -257,7 +267,8 @@ void Player::update(const sf::Time& dt) {
 			// circleshapes to draw instead of adding the pure positions. This prevents
 			// a lot of constructing in the draw() method.
 			sf::CircleShape shape;
-			shape.setFillColor(sf::Color::Blue);
+
+			shape.setFillColor(this->color);
 			shape.setPosition(this->pos);
 			shape.setRadius(this->radius);
 			this->positions.push_back(shape);
@@ -287,7 +298,6 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 		target.draw(p, states);
 	}
 
-	sf::Color c = sf::Color::Blue;
 	if (this->dead) {
 		target.draw(blastGenerator, states);
 	}
@@ -295,7 +305,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	sf::CircleShape shape;
 	shape.setRadius(this->radius);
 	shape.setPosition(this->pos);
-	shape.setFillColor(c);
+	shape.setFillColor(this->color);
 	target.draw(shape, states);
 
 	// draw direction arrow

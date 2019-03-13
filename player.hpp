@@ -31,6 +31,7 @@ public:
 	BlastParticle(float speed, float angle, float maxradius, const sf::Time& maxlife);
 	~BlastParticle();
 
+	bool isAlive() const;
 	void init(float speed, float angle, float maxradius, const sf::Time& maxlife);
 	void update(const sf::Time& dt);
 };
@@ -76,7 +77,7 @@ private:
 	int radius = 5;
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
-	sf::Color color = sf::Color::Blue;
+	sf::Color color = sf::Color::Red;
 
 	sf::Time totalTime = sf::Time::Zero; // The total time.
 	sf::Time startAfter = sf::seconds(1); // the time when the actual trail starts.
@@ -110,6 +111,7 @@ public:
 	float getAngle() const;
 	void setStartingPoint(int x, int y, float angle);
 	void setColor(const sf::Color& color);
+	const sf::Color& getColor() const;
 	bool isColliding(const Player& other) const;
 	void handleInput(const sf::Event& event);
 	void update(const sf::Time& delta);
