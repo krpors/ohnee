@@ -1,10 +1,10 @@
-#include "util.hpp"
-
-#include <SFML/Graphics.hpp>
-
 #include <cmath>
 #include <iostream>
 #include <random>
+
+#include <SFML/Graphics.hpp>
+
+#include "util.hpp"
 
 FpsCounter::FpsCounter() :
 		timer(sf::Time::Zero),

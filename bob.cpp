@@ -1,8 +1,7 @@
+#include <cmath>
 #include <memory>
 #include <iostream>
 #include <sstream>
-
-#include <cmath>
 
 #include <SFML/Graphics.hpp>
 

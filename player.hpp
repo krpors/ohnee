@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
 class Player; // forward decl
 
 
@@ -119,3 +122,5 @@ public:
 
 	const std::string str() const;
 };
+
+#endif // PLAYER_HPP

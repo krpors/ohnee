@@ -4,6 +4,9 @@
 
 #include "text.hpp"
 
+#ifndef BOB_HPP
+#define BOB_HPP
+
 class BobbingText : public Text {
 private:
 	float timer = 0.0f;
@@ -14,3 +17,6 @@ public:
 	void handleInput(const sf::Event& event);
 	void update(const sf::Time& dt);
 };
+
+
+#endif // BOB_HPP

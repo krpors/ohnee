@@ -1,12 +1,11 @@
-#ifndef UTIL_HPP
-#define UTIL_HPP
-
 #include <random>
 #include <memory>
 #include <vector>
 
 #include <SFML/Graphics.hpp>
 
+#ifndef UTIL_HPP
+#define UTIL_HPP
 
 class FpsCounter {
 private:
