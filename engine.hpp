@@ -25,6 +25,27 @@ public:
 
 // =============================================================================
 
+class PauseState : public GameState {
+private:
+	Engine* engine;
+	Text pauseText;
+
+	static PauseState instance;
+
+	PauseState();
+	~PauseState();
+public:
+	void init(Engine* const engine);
+
+	void handleInput(const sf::Event& event) override;
+	void update(const sf::Time& dt) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	static PauseState* getInstance();
+};
+
+// =============================================================================
+
 class PlayState : public GameState {
 private:
 	/**
@@ -40,13 +61,19 @@ private:
 
 	Player p;
 
-public:
-	PlayState(Engine* const engine);
+	PlayState();
 	~PlayState();
+
+	static PlayState instance;
+public:
+
+	void init(Engine* const engine);
 
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	static PlayState* getInstance();
 };
 
 // =============================================================================
@@ -57,7 +84,7 @@ private:
 
 	std::shared_ptr<ImageFont> fontSmall;
 
-	std::stack<std::shared_ptr<GameState>> stateStack;
+	std::stack<GameState*> stateStack;
 
 	bool quit = false;
 public:
@@ -66,7 +93,10 @@ public:
 
 	const std::shared_ptr<ImageFont>& getFontSmall() const;
 	void setQuit(bool quit);
+	void pushState(GameState* const state);
+	void popState();
 	void run();
+
 };
 
 #endif // ENGINE_HPP
