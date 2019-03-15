@@ -6,11 +6,11 @@
 #include "util.hpp"
 
 GameState::GameState() {
-	std::cout << "GameState()" << std::endl;
+	debug_print("%s", "GameState()");
 }
 
 GameState::~GameState() {
-	std::cout << "~GameState()" << std::endl;
+	debug_print("%s", "~GameState()");
 }
 
 // =============================================================================
@@ -21,13 +21,14 @@ PauseState::PauseState() {
 }
 
 PauseState::~PauseState() {
+	debug_print("%s", "~PauseState()");
 }
 
 void PauseState::init(Engine* const engine) {
 	this->engine = engine;
-	this->pauseText.setFont(this->engine->getFontSmall());
+	this->pauseText.setFont(this->engine->getFontLarge());
 	this->pauseText.setPosition(80, 80);
-	this->pauseText.setText("PAUSED!!!");
+	this->pauseText.setText("PAUSED!!! Press Q now to quit.");
 }
 
 void PauseState::handleInput(const sf::Event& event) {
@@ -37,6 +38,9 @@ void PauseState::handleInput(const sf::Event& event) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
 			this->engine->popState();
+			break;
+		case sf::Keyboard::Q:
+			this->engine->setQuit(true);
 			break;
 		default: break;
 		}
@@ -60,7 +64,6 @@ PauseState* PauseState::getInstance() {
 PlayState PlayState::instance;
 
 PlayState::PlayState() {
-	std::cout << "PlayState()" << std::endl;
 }
 
 void PlayState::init(Engine* const engine) {
@@ -70,7 +73,7 @@ void PlayState::init(Engine* const engine) {
 }
 
 PlayState::~PlayState() {
-	std::cout << "~PlayState()" << std::endl;
+	debug_print("%s", "~PlayState()");
 }
 
 void PlayState::handleInput(const sf::Event& event) {
@@ -81,9 +84,6 @@ void PlayState::handleInput(const sf::Event& event) {
 		case sf::Keyboard::Escape:
 			this->engine->pushState(PauseState::getInstance());
 			break;
-		// 1. push pause/menu state on the engine stack
-		// 2. draw the top of the stack
-		// 3. see PauseState handleInput
 		default: break;
 		}
 	}
@@ -108,11 +108,13 @@ PlayState* PlayState::getInstance() {
 // =============================================================================
 
 Engine::Engine() {
-	this->fontSmall = std::make_shared<ImageFont>(
-		"font.png",
-		" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?"
-	);
+	std::string chars = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?";
+
+	this->fontSmall = std::make_shared<ImageFont>("font.png", chars);
 	this->fontSmall->setKerning(2);
+
+	this->fontLarge = std::make_shared<ImageFont>("font-large.png", chars);
+	this->fontLarge->setKerning(2);
 }
 
 Engine::~Engine() {
@@ -122,16 +124,22 @@ const std::shared_ptr<ImageFont>& Engine::getFontSmall() const {
 	return this->fontSmall;
 }
 
+const std::shared_ptr<ImageFont>& Engine::getFontLarge() const {
+	return this->fontLarge;
+}
+
 void Engine::setQuit(bool quit) {
 	this->quit = quit;
 }
 
 void Engine::pushState(GameState* const state) {
 	this->stateStack.push(state);
+	debug_print("GameState stack size is now at size %li", this->stateStack.size());
 }
 
 void Engine::popState() {
 	this->stateStack.pop();
+	debug_print("GameState stack size is now at size %li", this->stateStack.size());
 }
 
 void Engine::run() {

@@ -83,6 +83,7 @@ private:
 	std::shared_ptr<sf::RenderWindow> renderWindow;
 
 	std::shared_ptr<ImageFont> fontSmall;
+	std::shared_ptr<ImageFont> fontLarge;
 
 	std::stack<GameState*> stateStack;
 
@@ -92,6 +93,8 @@ public:
 	~Engine();
 
 	const std::shared_ptr<ImageFont>& getFontSmall() const;
+	const std::shared_ptr<ImageFont>& getFontLarge() const;
+
 	void setQuit(bool quit);
 	void pushState(GameState* const state);
 	void popState();

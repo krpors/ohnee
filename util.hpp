@@ -7,6 +7,26 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+/*
+ * This part defines a macro so we can print debugging lines, but only when
+ * the NDEBUG macro is undefined (much like from <assert.h>. The output is
+ * colored for now, and can be controlled via the `filename' and `function'
+ * #defines.
+ *
+ * The macro debug_print only has an implementation when the project is built
+ * using the `debug' target.
+ */
+#ifndef NDEBUG
+#define filename "\x1b[34;1m%s\x1b[0m"
+#define function "\x1b[33;1m%s()\x1b[0m"
+#define debug_print(fmt, ...) \
+	do { fprintf(stderr, filename ":%d:" function "    " fmt "\n", __FILE__, __LINE__, __func__, ## __VA_ARGS__); } while (0)
+// Note: the double ## is to swallow the preceding comma in case the list is empty (gcc specific)
+#else
+#define debug_print(fmt, ...) (void)0;
+#endif // NDEBUG
+
+
 class FpsCounter {
 private:
 	sf::Time timer;
