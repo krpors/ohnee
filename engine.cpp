@@ -24,11 +24,17 @@ PauseState::~PauseState() {
 	debug_print("%s", "~PauseState()");
 }
 
-void PauseState::init(Engine* const engine) {
+void PauseState::setEngine(Engine* const engine) {
 	this->engine = engine;
 	this->pauseText.setFont(this->engine->getFontLarge());
 	this->pauseText.setPosition(80, 80);
 	this->pauseText.setText("PAUSED!!! Press Q now to quit.");
+}
+
+void PauseState::init() {
+	this->screencapture.create(800, 600);
+	std::cout << this->engine->getRenderWindow().getSize().x << std::endl;
+	this->screencapture.update(this->engine->getRenderWindow());
 }
 
 void PauseState::handleInput(const sf::Event& event) {
@@ -51,6 +57,12 @@ void PauseState::update(const sf::Time& dt) {
 }
 
 void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	sf::Sprite sprite;
+	sf::Color color(255, 255, 255, 100);
+	sprite.setColor(color);
+	sprite.setTexture(this->screencapture);
+
+	target.draw(sprite, states);
 	target.draw(this->pauseText, states);
 }
 
@@ -66,14 +78,17 @@ PlayState PlayState::instance;
 PlayState::PlayState() {
 }
 
-void PlayState::init(Engine* const engine) {
+PlayState::~PlayState() {
+	debug_print("%s", "~PlayState()");
+}
+
+void PlayState::setEngine(Engine* const engine) {
 	this->engine = engine;
 	this->text.setFont(engine->getFontSmall());
 	this->text.setText("YO MOMMA!");
 }
 
-PlayState::~PlayState() {
-	debug_print("%s", "~PlayState()");
+void PlayState::init() {
 }
 
 void PlayState::handleInput(const sf::Event& event) {
@@ -128,11 +143,16 @@ const std::shared_ptr<ImageFont>& Engine::getFontLarge() const {
 	return this->fontLarge;
 }
 
+const sf::RenderWindow& Engine::getRenderWindow() const {
+	return *this->renderWindow;
+}
+
 void Engine::setQuit(bool quit) {
 	this->quit = quit;
 }
 
 void Engine::pushState(GameState* const state) {
+	state->init();
 	this->stateStack.push(state);
 	debug_print("GameState stack size is now at size %li", this->stateStack.size());
 }
@@ -151,10 +171,10 @@ void Engine::run() {
 
 	// Initialize the possible states of the game here plx.
 	PlayState* statePlay = PlayState::getInstance();
-	statePlay->init(this);
+	statePlay->setEngine(this);
 
 	PauseState* statePause = PauseState::getInstance();
-	statePause->init(this);
+	statePause->setEngine(this);
 
 	this->stateStack.push(statePlay);
 

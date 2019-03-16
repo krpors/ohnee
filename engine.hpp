@@ -18,6 +18,10 @@ public:
 	GameState();
 	virtual ~GameState();
 
+	/**
+	 * Called when the state is pushed onto the stack.
+	 */
+	virtual void init() = 0;
 	virtual	void handleInput(const sf::Event& event) = 0;
 	virtual void update(const sf::Time& dt) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
@@ -29,14 +33,17 @@ class PauseState : public GameState {
 private:
 	Engine* engine;
 	Text pauseText;
+	sf::Texture screencapture;
 
 	static PauseState instance;
+
 
 	PauseState();
 	~PauseState();
 public:
-	void init(Engine* const engine);
+	void setEngine(Engine* const engine);
 
+	void init() override;
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -67,8 +74,9 @@ private:
 	static PlayState instance;
 public:
 
-	void init(Engine* const engine);
+	void setEngine(Engine* const engine);
 
+	void init() override;
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -80,6 +88,7 @@ public:
 
 class Engine {
 private:
+	// TODO: unique_ptr
 	std::shared_ptr<sf::RenderWindow> renderWindow;
 
 	std::shared_ptr<ImageFont> fontSmall;
@@ -95,6 +104,7 @@ public:
 	const std::shared_ptr<ImageFont>& getFontSmall() const;
 	const std::shared_ptr<ImageFont>& getFontLarge() const;
 
+	const sf::RenderWindow& getRenderWindow() const;
 	void setQuit(bool quit);
 	void pushState(GameState* const state);
 	void popState();
