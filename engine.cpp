@@ -32,9 +32,18 @@ void PauseState::setEngine(Engine* const engine) {
 }
 
 void PauseState::init() {
+	sf::Texture texture;
+	texture.create(800, 600);
+	texture.update(this->engine->getRenderWindow());
+	sf::Image source = texture.copyToImage();
+	sf::Image target;
+	target.create(800, 600);
+
+	// TODO: This takes a shitload of time on my vbox?
+	blurImage(source, target);
+
 	this->screencapture.create(800, 600);
-	std::cout << this->engine->getRenderWindow().getSize().x << std::endl;
-	this->screencapture.update(this->engine->getRenderWindow());
+	this->screencapture.loadFromImage(target);
 }
 
 void PauseState::handleInput(const sf::Event& event) {
@@ -58,8 +67,8 @@ void PauseState::update(const sf::Time& dt) {
 
 void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	sf::Sprite sprite;
-	sf::Color color(255, 255, 255, 100);
-	sprite.setColor(color);
+	// sf::Color color(255, 255, 255, 100);
+	// sprite.setColor(color);
 	sprite.setTexture(this->screencapture);
 
 	target.draw(sprite, states);

@@ -33,6 +33,7 @@ class PauseState : public GameState {
 private:
 	Engine* engine;
 	Text pauseText;
+
 	sf::Texture screencapture;
 
 	static PauseState instance;

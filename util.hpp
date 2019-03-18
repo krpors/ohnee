@@ -27,6 +27,15 @@
 #endif // NDEBUG
 
 
+/**
+ * This function is a very, very simplistic implementation of a convolution
+ * matrix to blur the source image onto the target image. TODO: refactor into
+ * something more useful/reusable? I.e. a custom convolution matrix?
+ */
+void blurImage(const sf::Image& source, sf::Image& target);
+
+//==============================================================================
+
 class FpsCounter {
 private:
 	sf::Time timer;

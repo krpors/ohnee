@@ -6,6 +6,59 @@
 
 #include "util.hpp"
 
+inline static sf::Color getPixelOrBlack(const sf::Image& source, int x, int y) {
+	if (
+		   x < 0
+		|| x > static_cast<int>(source.getSize().x)
+		|| y < 0
+		|| y > static_cast<int>(source.getSize().y)) {
+		return sf::Color::Black;
+	}
+
+	return source.getPixel(x, y);
+}
+
+void blurImage(const sf::Image& source, sf::Image& target) {
+	// Start iterating over every pixel available.
+	for (int y = 0; y < static_cast<int>(source.getSize().y); y++) {
+		for (int x = 0; x < static_cast<int>(source.getSize().x); x++) {
+			if (source.getPixel(x, y).a == 0) {
+				continue;
+			}
+			// These are the target rgba values.
+			int targetr = 0;
+			int targetg = 0;
+			int targetb = 0;
+			int targeta = 0;
+
+			// Check the surrounding pixels (around x, y) and get the color
+			// values. Add them all to the targetX values. These two loops
+			// will (and must) iterate 9 times exactly.
+			for (int xx = x - 1; xx <= x + 1; xx++) {
+				for (int yy = y - 1; yy <= y + 1; yy++) {
+					sf::Color pix = getPixelOrBlack(source, xx, yy);
+					targetr += pix.r;
+					targetg += pix.g;
+					targetb += pix.b;
+					targeta += pix.a;
+				}
+			}
+
+			// Average the color by dividing them by 9
+			sf::Color newColor;
+			newColor.r = targetr / 9;
+			newColor.g = targetg / 9;
+			newColor.b = targetb / 9;
+			newColor.a = targeta / 9;
+
+			// Set the target pixel in the target image to the convoluted color.
+			target.setPixel(x, y, newColor);
+		}
+	}
+}
+
+//==============================================================================
+
 FpsCounter::FpsCounter() :
 		timer(sf::Time::Zero),
 		fps(0),
