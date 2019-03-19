@@ -49,6 +49,11 @@ void PauseState::init() {
 void PauseState::handleInput(const sf::Event& event) {
 	assert(this->engine != nullptr);
 
+	// FIXME: when the init() state takes too much time, and the ESC key is pressed
+	// rapidly, there are more pause states pushed, resulting in a large stack
+	// of pause states! This is mitigated by setting the key repeat to false,
+	// but maybe this requires a better solution.
+
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
@@ -189,6 +194,7 @@ void Engine::run() {
 
 	this->renderWindow = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close, ctx);
 	this->renderWindow->setVerticalSyncEnabled(true);
+	this->renderWindow->setKeyRepeatEnabled(false);
 
 	sf::Clock clock;
 	while (this->renderWindow->isOpen() && !this->quit) {
