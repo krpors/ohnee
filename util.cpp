@@ -59,6 +59,17 @@ void blurImage(const sf::Image& source, sf::Image& target) {
 
 //==============================================================================
 
+Rng Rng::instance;
+
+Rng::Rng() {
+}
+
+Rng* Rng::get() {
+	return &instance;
+}
+
+//==============================================================================
+
 FpsCounter::FpsCounter() :
 		timer(sf::Time::Zero),
 		fps(0),

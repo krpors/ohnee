@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "bob.hpp"
 #include "player.hpp"
 #include "text.hpp"
 
@@ -38,7 +39,8 @@ public:
 class PauseState : public GameState {
 private:
 	Engine* engine;
-	Text pauseText;
+
+	BobbingText pauseText;
 
 	sf::Texture screencapture;
 

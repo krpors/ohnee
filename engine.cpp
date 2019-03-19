@@ -71,6 +71,7 @@ void PauseState::handleInput(const sf::Event& event) {
 }
 
 void PauseState::update(const sf::Time& dt) {
+	this->pauseText.update(dt);
 }
 
 void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {

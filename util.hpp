@@ -36,6 +36,23 @@ void blurImage(const sf::Image& source, sf::Image& target);
 
 //==============================================================================
 
+/**
+ * Random number generator singleton.
+ */
+class Rng {
+private:
+	std::mt19937 rng;
+	std::uniform_real_distribution<> dist = std::uniform_real_distribution<>(-1.0, 1.0);
+
+	static Rng instance;
+	Rng();
+public:
+
+	static Rng* get();
+};
+
+//==============================================================================
+
 class FpsCounter {
 private:
 	sf::Time timer;
