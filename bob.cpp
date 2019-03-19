@@ -8,6 +8,10 @@
 #include "bob.hpp"
 #include "text.hpp"
 
+BobbingText::BobbingText() {
+
+}
+
 BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) :
 		Text(font) {
 

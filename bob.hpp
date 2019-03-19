@@ -11,6 +11,8 @@ class BobbingText : public Text {
 private:
 	float timer = 0.0f;
 public:
+
+	BobbingText();
 	BobbingText(const std::shared_ptr<ImageFont>& font);
 	~BobbingText();
 
