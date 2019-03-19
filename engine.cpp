@@ -46,6 +46,9 @@ void PauseState::init() {
 	this->screencapture.loadFromImage(target);
 }
 
+void PauseState::cleanup() {
+}
+
 void PauseState::handleInput(const sf::Event& event) {
 	assert(this->engine != nullptr);
 
@@ -105,6 +108,9 @@ void PlayState::setEngine(Engine* const engine) {
 void PlayState::init() {
 }
 
+void PlayState::cleanup() {
+}
+
 void PlayState::handleInput(const sf::Event& event) {
 	assert(this->engine != nullptr);
 
@@ -149,11 +155,11 @@ Engine::Engine() {
 Engine::~Engine() {
 }
 
-const std::shared_ptr<ImageFont>& Engine::getFontSmall() const {
+const std::shared_ptr<ImageFont> Engine::getFontSmall() const {
 	return this->fontSmall;
 }
 
-const std::shared_ptr<ImageFont>& Engine::getFontLarge() const {
+const std::shared_ptr<ImageFont> Engine::getFontLarge() const {
 	return this->fontLarge;
 }
 

@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "engine.hpp"
+#include "text.hpp"
 
 void test() {
 	sf::RenderWindow window(sf::VideoMode(640, 480), "Yo", sf::Style::Close);
@@ -32,7 +33,6 @@ void test() {
 }
 
 int main() {
-	// test();
 	Engine e;
 	e.run();
 

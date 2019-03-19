@@ -22,6 +22,12 @@ public:
 	 * Called when the state is pushed onto the stack.
 	 */
 	virtual void init() = 0;
+
+	/**
+	 * Called when the state is popped from the stack.
+	 */
+	virtual void cleanup() = 0;
+
 	virtual	void handleInput(const sf::Event& event) = 0;
 	virtual void update(const sf::Time& dt) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
@@ -45,6 +51,7 @@ public:
 	void setEngine(Engine* const engine);
 
 	void init() override;
+	void cleanup() override;
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -78,6 +85,7 @@ public:
 	void setEngine(Engine* const engine);
 
 	void init() override;
+	void cleanup() override;
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -102,8 +110,8 @@ public:
 	Engine();
 	~Engine();
 
-	const std::shared_ptr<ImageFont>& getFontSmall() const;
-	const std::shared_ptr<ImageFont>& getFontLarge() const;
+	const std::shared_ptr<ImageFont> getFontSmall() const;
+	const std::shared_ptr<ImageFont> getFontLarge() const;
 
 	const sf::RenderWindow& getRenderWindow() const;
 	void setQuit(bool quit);
