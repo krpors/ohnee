@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "player.hpp"
+#include "util.hpp"
 
 Arrow::Arrow() {
 	this->varr.setPrimitiveType(sf::Lines);
@@ -100,12 +101,6 @@ void BlastParticle::update(const sf::Time& dt) {
 //==============================================================================
 
 BlastGenerator::BlastGenerator() {
-	// TODO: investigate the usage of only two or three RNG/Dists in an application,
-	// like a global var.
-	this->rng.seed(std::random_device()());
-	this->dist  = std::uniform_real_distribution<>(-1.0, 1.0);
-	this->dist2 = std::uniform_real_distribution<>(0.0, 1.0);
-
 }
 
 BlastGenerator::~BlastGenerator() {
@@ -114,10 +109,12 @@ BlastGenerator::~BlastGenerator() {
 void BlastGenerator::init(const Player& player) {
 	this->particles.clear();
 	for (int i = 0; i < 80; i++) {
-		sf::Time maxlife = sf::milliseconds(this->dist2(this->rng) * 2000);
-		float speed = 200.0f * this->dist2(this->rng);
-		float pangle = this->dist(this->rng) * 20 + player.getAngle();
-		float radius = 5 * this->dist2(this->rng) + 1;
+		sf::Time maxlife = sf::milliseconds(Rng::distPos() * 2000);
+		// float speed = 200.0f * this->dist2(this->rng);
+		float speed = 200.0f * Rng::distPos();
+		// float pangle = this->dist(this->rng) * 20 + player.getAngle();
+		float pangle = Rng::distNeg() * 20 + player.getAngle();
+		float radius = 5 * Rng::distPos() + 1;
 
 		BlastParticle p(speed, pangle, radius, maxlife);
 		p.setPosition(player.getPosition());
@@ -145,12 +142,9 @@ void BlastGenerator::draw(sf::RenderTarget& target, sf::RenderStates states) con
 //==============================================================================
 
 Player::Player() {
-	this->rng.seed(std::random_device()());
-	this->dist = std::uniform_real_distribution<>(0, 1.0);
-
-	float startx = this->dist(this->rng) * 800;
-	float starty = this->dist(this->rng) * 600;
-	float angle =  this->dist(this->rng) * 360;
+	float startx = Rng::distPos() * 800;
+	float starty = Rng::distPos() * 600;
+	float angle =  Rng::distPos() * 360;
 	this->setStartingPoint(startx, starty, angle);
 }
 

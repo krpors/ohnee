@@ -62,10 +62,16 @@ void blurImage(const sf::Image& source, sf::Image& target) {
 Rng Rng::instance;
 
 Rng::Rng() {
+	this->rng.seed(std::random_device()());
+
 }
 
-Rng* Rng::get() {
-	return &instance;
+float Rng::distNeg() {
+	return instance._distNeg(instance.rng);
+}
+
+float Rng::distPos() {
+	return instance._distPos(instance.rng);
 }
 
 //==============================================================================

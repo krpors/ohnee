@@ -47,10 +47,6 @@ class BlastGenerator : public sf::Drawable {
 private:
 	sf::Time time;
 
-	std::mt19937 rng;
-	std::uniform_real_distribution<> dist;
-	std::uniform_real_distribution<> dist2;
-
 	std::vector<BlastParticle> particles;
 
 public:
@@ -66,9 +62,6 @@ public:
 
 class Player : public sf::Drawable {
 private:
-	std::mt19937 rng;
-	std::uniform_real_distribution<> dist;
-
 	bool drawArrow = true;
 	Arrow arrow;
 

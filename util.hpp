@@ -1,3 +1,4 @@
+#include <cfloat>
 #include <random>
 #include <memory>
 #include <vector>
@@ -42,13 +43,24 @@ void blurImage(const sf::Image& source, sf::Image& target);
 class Rng {
 private:
 	std::mt19937 rng;
-	std::uniform_real_distribution<> dist = std::uniform_real_distribution<>(-1.0, 1.0);
+	// TODO: adjust to get inclusive range
+	std::uniform_real_distribution<> _distNeg = std::uniform_real_distribution<>(-1.0, std::nextafter(1.0, DBL_MAX));
+	std::uniform_real_distribution<> _distPos = std::uniform_real_distribution<>(0.0, std::nextafter(1.0, DBL_MAX));
 
 	static Rng instance;
 	Rng();
 public:
 
-	static Rng* get();
+	/**
+	 * Generates a random number in the range of [-1.0, 1.0] (inclusive).
+	 */
+	static float distNeg();
+
+	/**
+	 * Generates a random number in the range of [0.0, 1.0] (inclusive).
+	 */
+	static float distPos();
+
 };
 
 //==============================================================================
