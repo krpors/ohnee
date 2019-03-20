@@ -76,7 +76,7 @@ private:
 	sf::Color color = sf::Color::Red;
 
 	sf::Time totalTime = sf::Time::Zero; // The total time.
-	sf::Time startAfter = sf::seconds(1); // the time when the actual trail starts.
+	sf::Time startAfter = sf::seconds(2); // the time when the actual trail starts.
 
 	/**
 	 * The blast generator is just a particle generator which emits some particles
@@ -101,6 +101,11 @@ private:
 public:
 	Player();
 	~Player();
+
+	/**
+	 * Resets the state of the player (i.e. start over fresh).
+	 */
+	void reset();
 
 	const sf::Vector2f& getPosition() const;
 

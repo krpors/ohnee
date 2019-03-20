@@ -118,6 +118,7 @@ public:
 	const sf::RenderWindow& getRenderWindow() const;
 	void setQuit(bool quit);
 	void pushState(GameState* const state);
+	void initState();
 	void popState();
 	void run();
 

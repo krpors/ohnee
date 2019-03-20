@@ -82,12 +82,12 @@ void BlastParticle::update(const sf::Time& dt) {
 
 	sf::Vector2f newpos = sf::CircleShape::getPosition();
 	if (newpos.x < 0 && dx < 0) {
-		newpos.x = 800;
-	} else if (newpos.x > 800 && dx > 0) {
+		newpos.x = 1024;
+	} else if (newpos.x > 1024 && dx > 0) {
 		newpos.x = 0;
 	} else if (newpos.y < 0 && dy < 0) {
-		newpos.y = 600;
-	} else if (newpos.y > 600 && dy > 0) {
+		newpos.y = 768;
+	} else if (newpos.y > 768 && dy > 0) {
 		newpos.y = 0;
 	} else {
 		newpos.x += dx;
@@ -142,10 +142,7 @@ void BlastGenerator::draw(sf::RenderTarget& target, sf::RenderStates states) con
 //==============================================================================
 
 Player::Player() {
-	float startx = Rng::distPos() * 800;
-	float starty = Rng::distPos() * 600;
-	float angle =  Rng::distPos() * 360;
-	this->setStartingPoint(startx, starty, angle);
+	this->reset();
 }
 
 Player::~Player() {
@@ -157,6 +154,19 @@ bool Player::collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, i
 	float dy = pos2.y - pos1.y;
 	float dist = std::sqrt(dx * dx + dy * dy);
 	return dist < (radius1 + radius2);
+}
+
+void Player::reset() {
+	this->dead = false;
+	this->emplacementCounter = sf::Time::Zero;
+	this->positions.clear();
+	this->drawArrow = true;
+	this->totalTime = sf::Time::Zero;
+
+	float startx = Rng::distPos() * 1028;
+	float starty = Rng::distPos() * 768;
+	float angle =  Rng::distPos() * 360;
+	this->setStartingPoint(startx, starty, angle);
 }
 
 const sf::Vector2f& Player::getPosition() const {
@@ -249,16 +259,16 @@ void Player::update(const sf::Time& dt) {
 
 	// If we're moving left/right and moving out of bounds...
 	if (dx < 0 && this->pos.x < -this->radius) {
-		this->pos.x = 800;
+		this->pos.x = 1024;
 	}
-	if (dx > 0 && this->pos.x + this->radius > 800) {
+	if (dx > 0 && this->pos.x + this->radius > 1024) {
 		this->pos.x = -this->radius;
 	}
 	// If we're moving up/down and going out of bounds of the screen...
 	if (dy < 0 && this->pos.y < -this->radius) {
-		this->pos.y = 600;
+		this->pos.y = 768;
 	}
-	if (dy > 0 && this->pos.y + this->radius > 600) {
+	if (dy > 0 && this->pos.y + this->radius > 768) {
 		this->pos.y = -this->radius;
 	}
 

@@ -32,17 +32,19 @@ void PauseState::setEngine(Engine* const engine) {
 }
 
 void PauseState::init() {
+	sf::Vector2u winSize = this->engine->getRenderWindow().getSize();
+
 	sf::Texture texture;
-	texture.create(800, 600);
+	texture.create(winSize.x, winSize.y);
 	texture.update(this->engine->getRenderWindow());
 	sf::Image source = texture.copyToImage();
 	sf::Image target;
-	target.create(800, 600);
+	target.create(winSize.x, winSize.y);
 
 	// TODO: This takes a shitload of time on my vbox?
 	blurImage(source, target);
 
-	this->screencapture.create(800, 600);
+	this->screencapture.create(winSize.x, winSize.y);
 	this->screencapture.loadFromImage(target);
 }
 
@@ -61,6 +63,11 @@ void PauseState::handleInput(const sf::Event& event) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
 			this->engine->popState();
+			break;
+		case sf::Keyboard::R:
+			PlayState::getInstance()->init();
+			break;
+		case sf::Keyboard::F:
 			break;
 		case sf::Keyboard::Q:
 			this->engine->setQuit(true);
@@ -107,6 +114,7 @@ void PlayState::setEngine(Engine* const engine) {
 }
 
 void PlayState::init() {
+	this->p.reset();
 }
 
 void PlayState::cleanup() {
@@ -178,6 +186,10 @@ void Engine::pushState(GameState* const state) {
 	debug_print("GameState stack size is now at size %li", this->stateStack.size());
 }
 
+void Engine::initState() {
+	this->stateStack.top()->init();
+}
+
 void Engine::popState() {
 	this->stateStack.pop();
 	debug_print("GameState stack size is now at size %li", this->stateStack.size());
@@ -199,7 +211,7 @@ void Engine::run() {
 
 	this->stateStack.push(statePlay);
 
-	this->renderWindow = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "OHNEE v0.0.1", sf::Style::Close, ctx);
+	this->renderWindow = std::make_shared<sf::RenderWindow>(sf::VideoMode(1024, 768), "OHNEE v0.0.1", sf::Style::Close, ctx);
 	this->renderWindow->setVerticalSyncEnabled(true);
 	this->renderWindow->setKeyRepeatEnabled(false);
 
