@@ -59,19 +59,26 @@ void blurImage(const sf::Image& source, sf::Image& target) {
 
 //==============================================================================
 
-Rng Rng::instance;
+
 
 Rng::Rng() {
 	this->rng.seed(std::random_device()());
+}
 
+Rng& Rng::getInstance() {
+	// Supposed to be thread safe. We don't yet use multiple threads but
+	static Rng instance;
+	return instance;
 }
 
 float Rng::distNeg() {
+	Rng& instance = Rng::getInstance();
 	return instance._distNeg(instance.rng);
 }
 
 float Rng::distPos() {
-	return instance._distPos(instance.rng);
+	Rng& instance = Rng::getInstance();
+	return Rng::getInstance()._distPos(instance.rng);
 }
 
 //==============================================================================
