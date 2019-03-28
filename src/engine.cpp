@@ -52,7 +52,7 @@ void Engine::run() {
 	this->renderWindow->setKeyRepeatEnabled(false);
 
 	StateStack stack;
-	stack.pushState<IntroState>();
+	stack.pushState<PlayState>();
 
 	sf::Clock clock;
 	while (this->renderWindow->isOpen() && !this->quit) {

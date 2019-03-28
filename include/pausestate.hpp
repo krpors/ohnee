@@ -13,16 +13,10 @@ class Engine;
 
 class PauseState : public GameState {
 private:
-	Engine* engine;
-
-	BobbingText pauseText;
-
 	sf::Texture screencapture;
 
 public:
 	PauseState(StateStack& stack);
-
-	void setEngine(Engine* const engine);
 
 	void init() override;
 	void cleanup() override;

@@ -53,4 +53,7 @@ void StateStack::pushState() {
 }
 
 
+// TODO: register states based on state id (enum). This fixes a crapload of
+// circular dependencies.
+
 #endif // STATESTACK_HPP
