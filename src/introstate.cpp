@@ -3,8 +3,6 @@
 // Example of a nice clean menu:
 // https://media.indiedb.com/images/articles/1/81/80146/auto/title-menu.png
 
-IntroState IntroState::instance;
-
 IntroState::IntroState() {
 }
 
@@ -45,8 +43,4 @@ void IntroState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	shape.setSize({ 20, 20 });
 
 	target.draw(shape);
-}
-
-IntroState* IntroState::getInstance() {
-	return &IntroState::instance;
 }

@@ -22,12 +22,8 @@ private:
 	Text text;
 
 	Player p;
-
-	PlayState();
-	~PlayState();
-
-	static PlayState instance;
 public:
+	PlayState();
 
 	void setEngine(Engine* const engine);
 
@@ -36,8 +32,6 @@ public:
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-	static PlayState* getInstance();
 };
 
 #endif // PLAYSTATE_HPP

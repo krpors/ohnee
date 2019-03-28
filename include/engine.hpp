@@ -30,8 +30,6 @@ private:
 	std::shared_ptr<ImageFont> fontSmall;
 	std::shared_ptr<ImageFont> fontLarge;
 
-	std::stack<GameState*> stateStack;
-
 	bool quit = false;
 public:
 	Engine();
@@ -42,9 +40,6 @@ public:
 
 	const sf::RenderWindow& getRenderWindow() const;
 	void setQuit(bool quit);
-	void pushState(GameState* const state);
-	void initState();
-	void popState();
 	void run();
 
 };

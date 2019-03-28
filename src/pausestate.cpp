@@ -50,7 +50,7 @@ void PauseState::handleInput(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
-			this->engine->popState();
+			// this->engine->popState();
 			break;
 		case sf::Keyboard::R:
 			// PlayState::getInstance()->init();

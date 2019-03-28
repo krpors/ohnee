@@ -12,15 +12,13 @@
 class IntroState : public GameState {
 private:
 
-	static IntroState instance;
-
 	sf::Time timeTotal;
 
 	sf::Vector2f pos;
 
+public:
 	IntroState();
 	~IntroState();
-public:
 
 	void init() override;
 	void cleanup() override;
@@ -28,7 +26,6 @@ public:
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	static IntroState* getInstance();
 };
 
 #endif // INTROSTATE_HPP

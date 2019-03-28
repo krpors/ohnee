@@ -4,14 +4,7 @@
 #include "pausestate.hpp"
 #include "util.hpp"
 
-// Note: Required or else "undefined reference to `PlayState::instance'"
-PlayState PlayState::instance;
-
 PlayState::PlayState() {
-}
-
-PlayState::~PlayState() {
-	debug_print("%s", "~PlayState()");
 }
 
 void PlayState::setEngine(Engine* const engine) {
@@ -33,7 +26,7 @@ void PlayState::handleInput(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
-			this->engine->pushState(PauseState::getInstance());
+			// this->engine->pushState(PauseState::getInstance());
 			break;
 		default: break;
 		}
@@ -50,8 +43,4 @@ void PlayState::update(const sf::Time& dt) {
 void PlayState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(this->p, states);
 	target.draw(this->text, states);
-}
-
-PlayState* PlayState::getInstance() {
-	return &PlayState::instance;
 }

@@ -7,14 +7,8 @@
 #include "introstate.hpp"
 #include "pausestate.hpp"
 #include "playstate.hpp"
+#include "statestack.hpp"
 #include "util.hpp"
-
-// =============================================================================
-
-
-// =============================================================================
-
-// =============================================================================
 
 Engine::Engine() {
 	std::string chars = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?";
@@ -45,21 +39,6 @@ void Engine::setQuit(bool quit) {
 	this->quit = quit;
 }
 
-void Engine::pushState(GameState* const state) {
-	state->init();
-	this->stateStack.push(state);
-	debug_print("GameState stack size is now at size %li", this->stateStack.size());
-}
-
-void Engine::initState() {
-	this->stateStack.top()->init();
-}
-
-void Engine::popState() {
-	this->stateStack.pop();
-	debug_print("GameState stack size is now at size %li", this->stateStack.size());
-}
-
 void Engine::run() {
 	Text fpsText(this->fontSmall);
 	FpsCounter fps;
@@ -68,24 +47,15 @@ void Engine::run() {
 	ctx.antialiasingLevel = 4;
 
 	// Initialize the possible states of the game here plx.
-	IntroState* introState = IntroState::getInstance();
-
-	PlayState* statePlay = PlayState::getInstance();
-	statePlay->setEngine(this);
-
-	PauseState* statePause = PauseState::getInstance();
-	statePause->setEngine(this);
-
-	this->stateStack.push(introState);
-
 	this->renderWindow = std::make_shared<sf::RenderWindow>(sf::VideoMode(1024, 768), "OHNEE v0.0.1", sf::Style::Close, ctx);
 	this->renderWindow->setVerticalSyncEnabled(true);
 	this->renderWindow->setKeyRepeatEnabled(false);
 
+	StateStack stack;
+	stack.pushState<PlayState>();
+
 	sf::Clock clock;
 	while (this->renderWindow->isOpen() && !this->quit) {
-		GameState* currentState = this->stateStack.top();
-
 		sf::Time elapsed = clock.restart();
 
 		sf::Event event;
@@ -94,13 +64,13 @@ void Engine::run() {
 				this->renderWindow->close();
 			}
 
-			currentState->handleInput(event);
+			stack.handleEvent(event);
 		}
 
 		this->renderWindow->clear();
 		fps.update(elapsed);
-		currentState->update(elapsed);
-		this->renderWindow->draw(*currentState);
+		stack.update(elapsed);
+		this->renderWindow->draw(stack);
 
 		std::stringstream ss;
 		ss << "FPS: " << fps.getFps();
