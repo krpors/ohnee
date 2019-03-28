@@ -10,6 +10,8 @@
 #ifndef STATESTACK_HPP
 #define STATESTACK_HPP
 
+class GameState;
+
 /**
  * This class encapsulates the states of the game, backed by a vector. The class
  * is made sf::Drawable so we can easily draw things.
@@ -26,6 +28,8 @@ public:
     void pushState();
 
     void popState();
+
+    bool isEmpty() const;
 
     /**
      * Registers a particular state with the given ID.
@@ -45,7 +49,7 @@ private:
 // information.
 template<typename T>
 void StateStack::pushState() {
-    this->states.push(std::unique_ptr<T>(new T));
+    this->states.push(std::unique_ptr<T>(new T(*this)));
 }
 
 

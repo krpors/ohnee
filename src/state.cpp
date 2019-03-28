@@ -1,7 +1,8 @@
 #include "state.hpp"
 #include "util.hpp"
 
-GameState::GameState() {
+GameState::GameState(StateStack& stack) :
+stateStack(&stack) {
 	debug_print("%s", "GameState()");
 }
 

@@ -3,10 +3,8 @@
 // Example of a nice clean menu:
 // https://media.indiedb.com/images/articles/1/81/80146/auto/title-menu.png
 
-IntroState::IntroState() {
-}
-
-IntroState::~IntroState() {
+IntroState::IntroState(StateStack& stack) :
+	GameState(stack) {
 }
 
 void IntroState::init() {
@@ -19,6 +17,9 @@ void IntroState::handleInput(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
+			// FIXME: when popping the state, the update call in will fail
+			// because there are no states anymore. So "schedule" them instead.
+			stateStack->popState();
 			break;
 		default:
 			break;

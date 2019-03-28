@@ -19,12 +19,9 @@ private:
 
 	sf::Texture screencapture;
 
-	static PauseState instance;
-
-
-	PauseState();
-	~PauseState();
 public:
+	PauseState(StateStack& stack);
+
 	void setEngine(Engine* const engine);
 
 	void init() override;
@@ -33,7 +30,6 @@ public:
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	static PauseState* getInstance();
 };
 
 #endif // PAUSESTATE_HPP

@@ -4,7 +4,8 @@
 #include "pausestate.hpp"
 #include "util.hpp"
 
-PlayState::PlayState() {
+PlayState::PlayState(StateStack& stack) :
+	GameState(stack) {
 }
 
 void PlayState::setEngine(Engine* const engine) {

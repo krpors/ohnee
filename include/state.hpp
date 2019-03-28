@@ -3,9 +3,13 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
+// We require a forward declaration here to prevent things from fucking up
+// due to circular dependencies.
+class StateStack;
+
 class GameState : public sf::Drawable {
 public:
-	GameState();
+	GameState(StateStack& stateStack);
 	virtual ~GameState();
 
 	/**
@@ -21,6 +25,9 @@ public:
 	virtual	void handleInput(const sf::Event& event) = 0;
 	virtual void update(const sf::Time& dt) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
+
+protected:
+	StateStack* stateStack;
 };
 
 #endif // STATE_HPP

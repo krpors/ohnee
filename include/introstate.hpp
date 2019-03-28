@@ -1,6 +1,9 @@
+#include <iostream>
+
 #include <SFML/Graphics.hpp>
 
 #include "state.hpp"
+#include "statestack.hpp"
 #include "util.hpp"
 
 #ifndef INTROSTATE_HPP
@@ -17,8 +20,7 @@ private:
 	sf::Vector2f pos;
 
 public:
-	IntroState();
-	~IntroState();
+	IntroState(StateStack& stack);
 
 	void init() override;
 	void cleanup() override;

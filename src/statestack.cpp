@@ -26,3 +26,13 @@ void StateStack::handleEvent(const sf::Event& event) {
     std::unique_ptr<GameState>& state = this->states.top();
     state->handleInput(event);
 }
+
+void StateStack::popState() {
+    assert(!this->states.empty());
+
+    this->states.pop();
+}
+
+bool StateStack::isEmpty() const {
+    return this->states.empty();
+}

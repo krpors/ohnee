@@ -3,13 +3,8 @@
 #include "pausestate.hpp"
 #include "util.hpp"
 
-PauseState PauseState::instance;
-
-PauseState::PauseState() {
-}
-
-PauseState::~PauseState() {
-	debug_print("%s", "~PauseState()");
+PauseState::PauseState(StateStack& stack) :
+	GameState(stack) {
 }
 
 void PauseState::setEngine(Engine* const engine) {
@@ -77,8 +72,4 @@ void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 	target.draw(sprite, states);
 	target.draw(this->pauseText, states);
-}
-
-PauseState* PauseState::getInstance() {
-	return &PauseState::instance;
 }

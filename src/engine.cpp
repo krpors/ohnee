@@ -52,11 +52,15 @@ void Engine::run() {
 	this->renderWindow->setKeyRepeatEnabled(false);
 
 	StateStack stack;
-	stack.pushState<PlayState>();
+	stack.pushState<IntroState>();
 
 	sf::Clock clock;
 	while (this->renderWindow->isOpen() && !this->quit) {
 		sf::Time elapsed = clock.restart();
+
+		if (stack.isEmpty()) {
+			// this->quit = true;
+		}
 
 		sf::Event event;
 		while (this->renderWindow->pollEvent(event)) {
@@ -64,13 +68,19 @@ void Engine::run() {
 				this->renderWindow->close();
 			}
 
-			stack.handleEvent(event);
+			// FIXME: this call
+			if (!stack.isEmpty()) {
+				stack.handleEvent(event);
+			}
 		}
 
 		this->renderWindow->clear();
 		fps.update(elapsed);
-		stack.update(elapsed);
-		this->renderWindow->draw(stack);
+		// FIXME: this call
+		if (!stack.isEmpty()) {
+			stack.update(elapsed);
+			this->renderWindow->draw(stack);
+		}
 
 		std::stringstream ss;
 		ss << "FPS: " << fps.getFps();

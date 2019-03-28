@@ -23,7 +23,7 @@ private:
 
 	Player p;
 public:
-	PlayState();
+	PlayState(StateStack& stack);
 
 	void setEngine(Engine* const engine);
 
