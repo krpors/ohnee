@@ -209,10 +209,10 @@ PlayState* PlayState::getInstance() {
 Engine::Engine() {
 	std::string chars = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+|/\\:;'\"<>,.?";
 
-	this->fontSmall = std::make_shared<ImageFont>("font.png", chars);
+	this->fontSmall = std::make_shared<ImageFont>("./media/font.png", chars);
 	this->fontSmall->setKerning(2);
 
-	this->fontLarge = std::make_shared<ImageFont>("font-large.png", chars);
+	this->fontLarge = std::make_shared<ImageFont>("./media/font-large.png", chars);
 	this->fontLarge->setKerning(2);
 }
 
