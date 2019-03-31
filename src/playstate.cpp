@@ -4,8 +4,8 @@
 #include "pausestate.hpp"
 #include "util.hpp"
 
-PlayState::PlayState(StateStack& stack) :
-	GameState(stack) {
+PlayState::PlayState(StateStack& stack, GameState::Context context) :
+	GameState(stack, context) {
 }
 
 void PlayState::init() {

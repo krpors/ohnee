@@ -2,7 +2,8 @@
 
 #include "statestack.hpp"
 
-StateStack::StateStack() {
+StateStack::StateStack(GameState::Context context) :
+        context(context) {
     // TODO: pass some context object in.
 }
 

@@ -14,7 +14,7 @@ private:
 
 	Player p;
 public:
-	PlayState(StateStack& stack);
+	PlayState(StateStack& stack, GameState::Context context);
 
 	void init() override;
 	void cleanup() override;

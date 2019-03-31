@@ -4,8 +4,8 @@
 #include "statestack.hpp"
 #include "util.hpp"
 
-PauseState::PauseState(StateStack& stack) :
-	GameState(stack) {
+PauseState::PauseState(StateStack& stack, GameState::Context context) :
+	GameState(stack, context) {
 }
 
 void PauseState::init() {
@@ -46,6 +46,7 @@ void PauseState::handleInput(const sf::Event& event) {
 		case sf::Keyboard::F:
 			break;
 		case sf::Keyboard::Q:
+			GameState::context.engine->setQuit(true);
 			// this->engine->setQuit(true);
 			break;
 		default: break;

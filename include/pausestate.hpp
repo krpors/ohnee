@@ -9,14 +9,12 @@
 #ifndef PAUSESTATE_HPP
 #define PAUSESTATE_HPP
 
-class Engine;
-
 class PauseState : public GameState {
 private:
 	sf::Texture screencapture;
 
 public:
-	PauseState(StateStack& stack);
+	PauseState(StateStack& stack, GameState::Context context);
 
 	void init() override;
 	void cleanup() override;

@@ -6,11 +6,22 @@
 // We require a forward declaration here to prevent things from fucking up
 // due to circular dependencies.
 class StateStack;
+class Engine;
 
 class GameState : public sf::Drawable {
 public:
-	GameState(StateStack& stateStack);
+
+	class Context {
+		public:
+			Engine* engine;
+	};
+
+public:
+
+	GameState(StateStack& stateStack, GameState::Context context);
 	virtual ~GameState();
+
+
 
 	/**
 	 * Called when the state is pushed onto the stack.
@@ -28,6 +39,7 @@ public:
 
 protected:
 	StateStack* stateStack;
+	GameState::Context context;
 };
 
 #endif // STATE_HPP

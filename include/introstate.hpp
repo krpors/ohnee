@@ -20,7 +20,7 @@ private:
 	sf::Vector2f pos;
 
 public:
-	IntroState(StateStack& stack);
+	IntroState(StateStack& stack, GameState::Context context);
 
 	void init() override;
 	void cleanup() override;

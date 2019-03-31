@@ -18,7 +18,7 @@ class GameState;
  */
 class StateStack : public sf::Drawable {
 public:
-    StateStack();
+    StateStack(GameState::Context context);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void update(const sf::Time& dt);
@@ -38,6 +38,8 @@ public:
     void registerState(StateId id);
 
 private:
+    GameState::Context context;
+
     std::stack<std::unique_ptr<GameState>> states;
 
     std::map<StateId, std::unique_ptr<GameState>> stateMap;
@@ -49,7 +51,7 @@ private:
 // information.
 template<typename T>
 void StateStack::pushState() {
-    this->states.push(std::unique_ptr<T>(new T(*this)));
+    this->states.push(std::unique_ptr<T>(new T(*this, context)));
 }
 
 

@@ -51,7 +51,10 @@ void Engine::run() {
 	this->renderWindow->setVerticalSyncEnabled(true);
 	this->renderWindow->setKeyRepeatEnabled(false);
 
-	StateStack stack;
+	GameState::Context context;
+	context.engine = this;
+
+	StateStack stack(context);
 	stack.pushState<PlayState>();
 
 	sf::Clock clock;

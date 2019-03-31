@@ -3,8 +3,8 @@
 // Example of a nice clean menu:
 // https://media.indiedb.com/images/articles/1/81/80146/auto/title-menu.png
 
-IntroState::IntroState(StateStack& stack) :
-	GameState(stack) {
+IntroState::IntroState(StateStack& stack, GameState::Context context) :
+	GameState(stack, context) {
 }
 
 void IntroState::init() {
