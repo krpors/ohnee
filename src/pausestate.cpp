@@ -6,26 +6,30 @@
 
 PauseState::PauseState(StateStack& stack, GameState::Context context) :
 	GameState(stack, context) {
+
+	this->init();
 }
 
 void PauseState::init() {
-	// sf::Vector2u winSize = this->engine->getRenderWindow().getSize();
+	const sf::RenderWindow& window = this->context.engine->getRenderWindow();
+	sf::Vector2u winSize = window.getSize();
 
-	// sf::Texture texture;
-	// texture.create(winSize.x, winSize.y);
-	// texture.update(this->engine->getRenderWindow());
-	// sf::Image source = texture.copyToImage();
-	// sf::Image target;
-	// target.create(winSize.x, winSize.y);
+	sf::Texture texture;
+	texture.create(winSize.x, winSize.y);
+	texture.update(window);
+	sf::Image source = texture.copyToImage();
+	sf::Image target;
+	target.create(winSize.x, winSize.y);
 
-	// // TODO: This takes a shitload of time on my vbox?
-	// blurImage(source, target);
+	// TODO: This takes a shitload of time on my vbox?
+	blurImage(source, target);
 
-	// this->screencapture.create(winSize.x, winSize.y);
-	// this->screencapture.loadFromImage(target);
+	this->screencapture.create(winSize.x, winSize.y);
+	this->screencapture.loadFromImage(target);
 }
 
 void PauseState::cleanup() {
+
 }
 
 void PauseState::handleInput(const sf::Event& event) {
@@ -59,11 +63,11 @@ void PauseState::update(const sf::Time& dt) {
 }
 
 void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	// sf::Sprite sprite;
-	// sf::Color color(255, 255, 255, 100);
-	// sprite.setColor(color);
-	// sprite.setTexture(this->screencapture);
+	sf::Sprite sprite;
+	sf::Color color(255, 255, 255, 100);
+	sprite.setColor(color);
+	sprite.setTexture(this->screencapture);
 
-	// target.draw(sprite, states);
+	target.draw(sprite, states);
 	// target.draw(this->pauseText, states);
 }
