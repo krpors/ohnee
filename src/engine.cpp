@@ -55,7 +55,7 @@ void Engine::run() {
 	context.engine = this;
 
 	StateStack stack(context);
-	stack.pushState<PlayState>();
+	stack.pushState<IntroState>();
 
 	sf::Clock clock;
 	while (this->renderWindow->isOpen() && !this->quit) {
@@ -65,6 +65,7 @@ void Engine::run() {
 			// this->quit = true;
 		}
 
+		// FIXME: asdjklalsdjk
 		sf::Event event;
 		while (this->renderWindow->pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {

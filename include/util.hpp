@@ -8,26 +8,6 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
-/*
- * This part defines a macro so we can print debugging lines, but only when
- * the NDEBUG macro is undefined (much like from <assert.h>. The output is
- * colored for now, and can be controlled via the `filename' and `function'
- * #defines.
- *
- * The macro debug_print only has an implementation when the project is built
- * using the `debug' target.
- */
-#ifndef NDEBUG
-#define filename "\x1b[34;1m%s\x1b[0m"
-#define function "\x1b[33;1m%s()\x1b[0m"
-#define debug_print(fmt, ...) \
-	do { fprintf(stderr, filename ":%d:" function "    " fmt "\n", __FILE__, __LINE__, __func__, ## __VA_ARGS__); } while (0)
-// Note: the double ## is to swallow the preceding comma in case the list is empty (gcc specific)
-#else
-#define debug_print(fmt, ...) (void)0;
-#endif // NDEBUG
-
-
 /**
  * This function is a very, very simplistic implementation of a convolution
  * matrix to blur the source image onto the target image. TODO: refactor into
@@ -43,7 +23,8 @@ void blurImage(const sf::Image& source, sf::Image& target);
 class Rng {
 private:
 	std::mt19937 rng;
-	// TODO: adjust to get inclusive range
+
+	// The nextafter is used to get an inclusive range
 	std::uniform_real_distribution<> _distNeg = std::uniform_real_distribution<>(-1.0, std::nextafter(1.0, DBL_MAX));
 	std::uniform_real_distribution<> _distPos = std::uniform_real_distribution<>(0.0, std::nextafter(1.0, DBL_MAX));
 

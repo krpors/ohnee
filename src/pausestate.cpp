@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 
 #include "pausestate.hpp"
 #include "statestack.hpp"
@@ -10,7 +11,20 @@ PauseState::PauseState(StateStack& stack, GameState::Context context) :
 	this->init();
 }
 
+PauseState::~PauseState() {
+	std::clog << "Destroying pause state" << std::endl;
+}
+
 void PauseState::init() {
+	this->pauseText.setFont(this->context.engine->getFontLarge());
+
+	std::string crap = "The game is paused\n";
+	crap += "Press Q now to quit to main menu!";
+	this->pauseText.setText(crap);
+
+	this->pauseText.setPosition(200, 150);
+	this->pauseText.setRotation(-15);
+
 	const sf::RenderWindow& window = this->context.engine->getRenderWindow();
 	sf::Vector2u winSize = window.getSize();
 
@@ -29,7 +43,6 @@ void PauseState::init() {
 }
 
 void PauseState::cleanup() {
-
 }
 
 void PauseState::handleInput(const sf::Event& event) {
@@ -42,16 +55,14 @@ void PauseState::handleInput(const sf::Event& event) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
 			this->stateStack->popState();
-			// this->engine->popState();
 			break;
 		case sf::Keyboard::R:
-			// PlayState::getInstance()->init();
 			break;
 		case sf::Keyboard::F:
 			break;
 		case sf::Keyboard::Q:
-			GameState::context.engine->setQuit(true);
-			// this->engine->setQuit(true);
+			std::cout << this->stateStack << std::endl;
+			// FIXME: pop the state in a queued fashion
 			break;
 		default: break;
 		}
@@ -59,7 +70,7 @@ void PauseState::handleInput(const sf::Event& event) {
 }
 
 void PauseState::update(const sf::Time& dt) {
-	// this->pauseText.update(dt);
+	this->pauseText.update(dt);
 }
 
 void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -69,5 +80,5 @@ void PauseState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	sprite.setTexture(this->screencapture);
 
 	target.draw(sprite, states);
-	// target.draw(this->pauseText, states);
+	target.draw(this->pauseText, states);
 }

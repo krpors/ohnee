@@ -2,9 +2,12 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "engine.hpp"
+#include "playstate.hpp"
 #include "state.hpp"
 #include "statestack.hpp"
 #include "util.hpp"
+#include "text.hpp"
 
 #ifndef INTROSTATE_HPP
 #define INTROSTATE_HPP
@@ -15,12 +18,13 @@
 class IntroState : public GameState {
 private:
 
-	sf::Time timeTotal;
+	Text text;
 
-	sf::Vector2f pos;
+	sf::Time timeTotal;
 
 public:
 	IntroState(StateStack& stack, GameState::Context context);
+	~IntroState();
 
 	void init() override;
 	void cleanup() override;

@@ -8,6 +8,9 @@ PlayState::PlayState(StateStack& stack, GameState::Context context) :
 	GameState(stack, context) {
 }
 
+PlayState::~PlayState() {
+}
+
 void PlayState::init() {
 	this->p.reset();
 }

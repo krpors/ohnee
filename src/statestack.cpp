@@ -1,10 +1,14 @@
 #include <cassert>
+#include <iostream>
 
 #include "statestack.hpp"
 
+// BUG: we MUST queue the popping actions because popState() will effectively
+// call the deleter on the state. This will result in undefined behaviour.
+
 StateStack::StateStack(GameState::Context context) :
-        context(context) {
-    // TODO: pass some context object in.
+context(context) {
+
 }
 
 void StateStack::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -31,6 +35,9 @@ void StateStack::handleEvent(const sf::Event& event) {
 void StateStack::popState() {
     assert(!this->states.empty());
 
+    // Note: when we pop() the state, the destructor is called automatically
+    // due to it being a unique_ptr. We have to queue the popping/pushing to
+    // prevent UB.
     this->states.pop();
 }
 

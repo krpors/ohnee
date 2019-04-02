@@ -13,8 +13,11 @@ class PauseState : public GameState {
 private:
 	sf::Texture screencapture;
 
+	BobbingText pauseText;
+
 public:
 	PauseState(StateStack& stack, GameState::Context context);
+	~PauseState();
 
 	void init() override;
 	void cleanup() override;
