@@ -39,6 +39,8 @@ public:
 	void update(const sf::Time& dt);
 };
 
+// =============================================================================
+
 /**
  * This will generate a 'blast' when a player dies. It's a specific particle
  * generator.
@@ -112,6 +114,11 @@ public:
 	float getAngle() const;
 	void setStartingPoint(int x, int y, float angle);
 	void setColor(const sf::Color& color);
+
+	/**
+	 * Stop moving left or right.
+	 */
+	void unmove();
 	const sf::Color& getColor() const;
 	bool isColliding(const Player& other) const;
 	void handleInput(const sf::Event& event);

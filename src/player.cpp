@@ -49,7 +49,7 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(this->varr, states);
 }
 
-//==============================================================================
+// =============================================================================
 
 BlastParticle::BlastParticle(float speed, float angle, float radius, const sf::Time& maxlife) :
 		speed(speed),
@@ -98,7 +98,7 @@ void BlastParticle::update(const sf::Time& dt) {
 	sf::CircleShape::setRadius(this->maxradius * percentageLife);
 }
 
-//==============================================================================
+// =============================================================================
 
 BlastGenerator::BlastGenerator() {
 }
@@ -139,7 +139,7 @@ void BlastGenerator::draw(sf::RenderTarget& target, sf::RenderStates states) con
 	}
 }
 
-//==============================================================================
+// =============================================================================
 
 Player::Player() {
 	this->reset();
@@ -188,6 +188,11 @@ void Player::setColor(const sf::Color& color) {
 	this->color = color;
 }
 
+void Player::unmove() {
+	this->moveLeft = false;
+	this->moveRight = false;
+}
+
 const sf::Color& Player::getColor() const {
 	return this->color;
 }
@@ -210,27 +215,22 @@ bool Player::isCollidingWithSelf() const {
 }
 
 bool Player::isColliding(const Player& other) const {
-	// std::cout << std::endl;
 	return false;
 }
 
 void Player::handleInput(const sf::Event& event) {
-	if (event.type == sf::Event::KeyPressed) {
-		switch (event.key.code) {
-		case sf::Keyboard::Left:  this->moveLeft = true;  break;
-		case sf::Keyboard::Right: this->moveRight = true; break;
-		default: break;
-		}
-	} else if (event.type == sf::Event::KeyReleased) {
-		switch (event.key.code) {
-		case sf::Keyboard::Left:  this->moveLeft =  false;  break;
-		case sf::Keyboard::Right: this->moveRight = false; break;
-		default: break;
-		}
+	this->moveLeft = false;
+	this->moveRight = false;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		this->moveLeft = true;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		this->moveRight =true;
 	}
 }
 
 void Player::update(const sf::Time& dt) {
+
 	this->t += dt;
 	this->totalTime += dt;
 	this->emplacementCounter += dt;

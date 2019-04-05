@@ -19,11 +19,11 @@ void PlayState::cleanup() {
 }
 
 void PlayState::handleInput(const sf::Event& event) {
+
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
-			// TODO: When left is held, and then esc, the left state is remembered.
-			// Player direction needs to be cleared at this point.
+			this->p.unmove();
 			this->stateStack->pushState<PauseState>();
 			break;
 		default: break;
