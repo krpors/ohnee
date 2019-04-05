@@ -3,9 +3,6 @@
 
 #include "statestack.hpp"
 
-// BUG: we MUST queue the popping actions because popState() will effectively
-// call the deleter on the state. This will result in undefined behaviour.
-
 StateStack::StateStack(GameState::Context context) :
 context(context) {
 
@@ -30,6 +27,8 @@ void StateStack::handleEvent(const sf::Event& event) {
 
     std::unique_ptr<GameState>& state = this->states.top();
     state->handleInput(event);
+
+    this->applyChanges();
 }
 
 void StateStack::popState() {
@@ -37,8 +36,22 @@ void StateStack::popState() {
 
     // Note: when we pop() the state, the destructor is called automatically
     // due to it being a unique_ptr. We have to queue the popping/pushing to
-    // prevent UB.
-    this->states.pop();
+    // prevent UB, that's why we push back a pending action for popping.
+    this->pendingActions.push_back(1);
+
+    std::clog << "Queueing a stack pop" << std::endl;
+}
+
+void StateStack::applyChanges() {
+    if (this->pendingActions.empty()) {
+        return;
+    }
+
+    std::clog << "Applying " << this->pendingActions.size() << " stack pop changes" << std::endl;
+    for (auto it = this->pendingActions.begin(); it != this->pendingActions.end(); it++) {
+        this->states.pop();
+    }
+    this->pendingActions.clear();
 }
 
 bool StateStack::isEmpty() const {

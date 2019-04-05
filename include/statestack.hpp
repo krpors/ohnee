@@ -13,7 +13,7 @@
 class GameState;
 
 /**
- * This class encapsulates the states of the game, backed by a vector. The class
+ * This class encapsulates the states of the game, backed by a stack. The class
  * is made sf::Drawable so we can easily draw things.
  */
 class StateStack : public sf::Drawable {
@@ -24,10 +24,22 @@ public:
     void update(const sf::Time& dt);
     void handleEvent(const sf::Event& event);
 
+    /**
+     * Directly pushes a state to the stack. This is not a queued action.
+     */
     template<typename T>
     void pushState();
 
+    /**
+     * Queues a state pop from the stack.
+     */
     void popState();
+
+    /**
+     * Applies the pending pop actions on the stackstate. The actions are read from
+     * the pendingActions vector.
+     */
+    void applyChanges();
 
     bool isEmpty() const;
 
@@ -39,6 +51,8 @@ public:
 
 private:
     GameState::Context context;
+
+    std::vector<int> pendingActions;
 
     std::stack<std::unique_ptr<GameState>> states;
 

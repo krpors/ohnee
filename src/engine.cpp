@@ -92,5 +92,6 @@ void Engine::run() {
 		this->renderWindow->draw(fpsText);
 
 		this->renderWindow->display();
+
 	}
 }

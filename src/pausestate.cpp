@@ -46,26 +46,28 @@ void PauseState::cleanup() {
 }
 
 void PauseState::handleInput(const sf::Event& event) {
+	// Only respond to keypresses for now.
+	if (event.type != sf::Event::KeyPressed) {
+		return;
+	}
+
 	// FIXME: when the init() state takes too much time, and the ESC key is pressed
 	// rapidly, there are more pause states pushed, resulting in a large stack
 	// of pause states! This is mitigated by setting the key repeat to false,
 	// but maybe this requires a better solution.
-
-	if (event.type == sf::Event::KeyPressed) {
-		switch (event.key.code) {
-		case sf::Keyboard::Escape:
-			this->stateStack->popState();
-			break;
-		case sf::Keyboard::R:
-			break;
-		case sf::Keyboard::F:
-			break;
-		case sf::Keyboard::Q:
-			std::cout << this->stateStack << std::endl;
-			// FIXME: pop the state in a queued fashion
-			break;
-		default: break;
-		}
+	switch (event.key.code) {
+	case sf::Keyboard::Escape:
+		this->stateStack->popState();
+		break;
+	case sf::Keyboard::R:
+		break;
+	case sf::Keyboard::F:
+		break;
+	case sf::Keyboard::Q:
+		this->stateStack->popState(); // pop the pause state
+		this->stateStack->popState(); // pop the play state
+		break;
+	default: break;
 	}
 }
 

@@ -18,7 +18,8 @@ void IntroState::init() {
 	text.setFont(this->context.engine->getFontLarge());
 	std::stringstream ss;
 	ss << "Welcome to OHNEE!" << std::endl
-	   << "Press P to play.";
+	   << "Press P to play." << std::endl
+	   << "Press Q to quit.";
 	text.setText(ss.str());
 	text.setPosition( { 20, 100} );
 }
