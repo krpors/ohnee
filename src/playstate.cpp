@@ -24,7 +24,7 @@ void PlayState::handleInput(const sf::Event& event) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
 			this->p.unmove();
-			this->stateStack->pushState<PauseState>();
+			this->stateStack->pushState(StateId::Pause);
 			break;
 		default: break;
 		}

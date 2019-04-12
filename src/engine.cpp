@@ -55,15 +55,15 @@ void Engine::run() {
 	context.engine = this;
 
 	StateStack stack(context);
-	stack.pushState<IntroState>();
+	stack.registerState<IntroState>(StateId::Intro);
+	stack.registerState<PlayState>(StateId::Game);
+	stack.registerState<PauseState>(StateId::Pause);
+
+	stack.pushState(StateId::Intro);
 
 	sf::Clock clock;
 	while (this->renderWindow->isOpen() && !this->quit) {
 		sf::Time elapsed = clock.restart();
-
-		if (stack.isEmpty()) {
-			// this->quit = true;
-		}
 
 		// FIXME: asdjklalsdjk
 		sf::Event event;
@@ -72,19 +72,14 @@ void Engine::run() {
 				this->renderWindow->close();
 			}
 
-			// FIXME: this call
-			if (!stack.isEmpty()) {
-				stack.handleEvent(event);
-			}
+			stack.handleEvent(event);
 		}
 
 		this->renderWindow->clear();
 		fps.update(elapsed);
 		// FIXME: this call
-		if (!stack.isEmpty()) {
-			stack.update(elapsed);
-			this->renderWindow->draw(stack);
-		}
+		stack.update(elapsed);
+		this->renderWindow->draw(stack);
 
 		std::stringstream ss;
 		ss << "FPS: " << fps.getFps();
@@ -93,5 +88,6 @@ void Engine::run() {
 
 		this->renderWindow->display();
 
+		stack.applyChanges();
 	}
 }

@@ -1,3 +1,4 @@
+#include <functional>
 #include <map>
 #include <memory>
 #include <stack>
@@ -27,8 +28,7 @@ public:
     /**
      * Directly pushes a state to the stack. This is not a queued action.
      */
-    template<typename T>
-    void pushState();
+    void pushState(StateId id);
 
     /**
      * Queues a state pop from the stack.
@@ -50,13 +50,26 @@ public:
     void registerState(StateId id);
 
 private:
-    GameState::Context context;
+    enum Action {
+        Push,
+        Pop,
+        Clear
+    };
 
-    std::vector<int> pendingActions;
+    class PendingAction {
+    public:
+        PendingAction(Action a, StateId id = StateId::None) : action(a), id(id) {}
+        Action action;
+        StateId id;
+    };
+
+    GameState::Context context;
 
     std::stack<std::unique_ptr<GameState>> states;
 
-    std::map<StateId, std::unique_ptr<GameState>> stateMap;
+    std::map<StateId, std::function<std::unique_ptr<GameState>()>> stateMap;
+
+    std::vector<PendingAction> pendingActions;
 };
 
 // Note to self: the best practice for templates seem to be to define them in
@@ -64,10 +77,13 @@ private:
 // https://isocpp.org/wiki/faq/templates#templates-defn-vs-decl for more
 // information.
 template<typename T>
-void StateStack::pushState() {
-    this->states.push(std::unique_ptr<T>(new T(*this, context)));
-}
+void StateStack::registerState(StateId id) {
+    auto yo = [this]() {
+        return std::unique_ptr<T>(new T(*this, context));
+    };
 
+    this->stateMap[id] = yo;
+}
 
 // TODO: register states based on state id (enum). This fixes a crapload of
 // circular dependencies.

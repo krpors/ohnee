@@ -34,7 +34,7 @@ void IntroState::handleInput(const sf::Event& event) {
 			this->context.engine->setQuit(true);
 			break;
 		case sf::Keyboard::P:
-			stateStack->pushState<PlayState>();
+			stateStack->pushState(StateId::Game);
 		default:
 			break;
 		}
