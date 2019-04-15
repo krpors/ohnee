@@ -50,25 +50,50 @@ public:
     void registerState(StateId id);
 
 private:
-    enum Action {
-        Push,
-        Pop,
-        Clear
-    };
 
+    /**
+     * An action which can be executed on the stack state must be "queued".
+     * This action can be added to the pendingActions vector and must be executed
+     * at the end of the game loop.
+     */
     class PendingAction {
     public:
-        PendingAction(Action a, StateId id = StateId::None) : action(a), id(id) {}
-        Action action;
+        /**
+         * A pendingaction can have a type. This enumeration defines that.
+         */
+        enum ActionType {
+            Push,
+            Pop,
+            Clear
+        };
+
+        PendingAction(ActionType a, StateId id = StateId::None) : action(a), id(id) {}
+        ActionType action;
         StateId id;
     };
 
     GameState::Context context;
 
+    /**
+     * Stack with the current states.
+     */
     std::stack<std::unique_ptr<GameState>> states;
 
+    /**
+     * This map contains a stateid mapped to a factory function.
+     */
     std::map<StateId, std::function<std::unique_ptr<GameState>()>> stateMap;
 
+    /**
+     * A vector with the pending actions to run after each game loop. This is
+     * because a GameState has a relationship with the StateStack. When we pop
+     * a GameState from the stack, it is effectively destroyed (because the
+     * unique_ptr goes out of scope). Because of this, we are not allowed to
+     * execute gameState->stateStack->pop() twice, because the second call would
+     * execute the pop on a stateStack on the destroyed gameState!
+     *
+     * This idea was stolen a bit from the SFML book, chapter 5 (States).
+     */
     std::vector<PendingAction> pendingActions;
 };
 
@@ -84,8 +109,5 @@ void StateStack::registerState(StateId id) {
 
     this->stateMap[id] = yo;
 }
-
-// TODO: register states based on state id (enum). This fixes a crapload of
-// circular dependencies.
 
 #endif // STATESTACK_HPP

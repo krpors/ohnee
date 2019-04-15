@@ -3,6 +3,19 @@
 
 #include "statestack.hpp"
 
+static inline const std::string stateIdToString(StateId id) {
+    switch (id) {
+    case StateId::None:  return "NoneState";
+    case StateId::Intro: return "Intro";
+    case StateId::Menu:  return "MenuState";
+    case StateId::Game:  return "GameState";
+    case StateId::Pause: return "PauseState";
+    default: return "";
+    }
+}
+
+// =============================================================================
+
 StateStack::StateStack(GameState::Context context) :
 context(context) {
 
@@ -32,8 +45,6 @@ void StateStack::handleEvent(const sf::Event& event) {
         return;
     }
 
-    std::cout << "what" << std::endl;
-
     std::unique_ptr<GameState>& state = this->states.top();
     state->handleInput(event);
 
@@ -44,8 +55,8 @@ void StateStack::pushState(StateId id) {
     auto it = this->stateMap.find(id);
     assert (it != this->stateMap.end());
 
-    std::cout << "Pushing state " << id << std::endl;
-    this->pendingActions.emplace_back(Action::Push, id);
+    std::cout << "Pushing state " << stateIdToString(id) << std::endl;
+    this->pendingActions.emplace_back(PendingAction::ActionType::Push, id);
 }
 
 void StateStack::popState() {
@@ -54,21 +65,16 @@ void StateStack::popState() {
     // Note: when we pop() the state, the destructor is called automatically
     // due to it being a unique_ptr. We have to queue the popping/pushing to
     // prevent UB, that's why we push back a pending action for popping.
-    this->pendingActions.emplace_back(Action::Pop);
-
-    std::clog << "Queueing a stack pop" << std::endl;
+    this->pendingActions.emplace_back(PendingAction::ActionType::Pop);
 }
 
 void StateStack::applyChanges() {
-    std::cout << "yes" << std::endl;
-    for (auto it = this->pendingActions.begin(); it != this->pendingActions.end(); it++) {
-        std::cout << "BOASDOADA" << std::endl;
-        const PendingAction& a = *it;
-        if (a.action == Action::Push) {
+    for (const auto& a : this->pendingActions) {
+        if (a.action == PendingAction::ActionType::Push) {
             auto it = this->stateMap.find(a.id);
             assert (it != this->stateMap.end());
             this->states.push(it->second());
-        } else if (a.action == Action::Pop) {
+        } else if (a.action == PendingAction::ActionType::Pop) {
             this->states.pop();
         }
     }
