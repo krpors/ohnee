@@ -1,11 +1,12 @@
+#ifndef BOB_HPP
+#define BOB_HPP
+
 #include <memory>
 
 #include <SFML/Graphics.hpp>
 
 #include "text.hpp"
 
-#ifndef BOB_HPP
-#define BOB_HPP
 
 class BobbingText : public Text {
 private:

@@ -1,7 +1,7 @@
-#include <SFML/Graphics.hpp>
-
 #ifndef STATE_HPP
 #define STATE_HPP
+
+#include <SFML/Graphics.hpp>
 
 // We require a forward declaration here to prevent things from fucking up
 // due to circular dependencies.

@@ -1,11 +1,13 @@
+#ifndef PLAYSTATE_HPP
+#define PLAYSTATE_HPP
+
+
 #include <SFML/Graphics.hpp>
 
 #include "engine.hpp"
 #include "state.hpp"
 #include "statestack.hpp"
 
-#ifndef PLAYSTATE_HPP
-#define PLAYSTATE_HPP
 
 
 class PlayState : public GameState {

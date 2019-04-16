@@ -1,10 +1,10 @@
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
 #include <random>
 #include <vector>
 
 #include <SFML/Graphics.hpp>
-
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
 
 class Player; // forward decl
 

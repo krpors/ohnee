@@ -1,3 +1,6 @@
+#ifndef ENGINE_HPP
+#define ENGINE_HPP
+
 #include <memory>
 #include <stack>
 
@@ -9,8 +12,6 @@
 #include "state.hpp"
 #include "text.hpp"
 
-#ifndef ENGINE_HPP
-#define ENGINE_HPP
 
 class Engine {
 private:

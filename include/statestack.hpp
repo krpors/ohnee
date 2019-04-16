@@ -1,3 +1,6 @@
+#ifndef STATESTACK_HPP
+#define STATESTACK_HPP
+
 #include <functional>
 #include <map>
 #include <memory>
@@ -8,8 +11,6 @@
 #include "state.hpp"
 #include "stateids.hpp"
 
-#ifndef STATESTACK_HPP
-#define STATESTACK_HPP
 
 class GameState;
 

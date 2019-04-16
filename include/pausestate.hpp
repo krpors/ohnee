@@ -1,3 +1,5 @@
+#ifndef PAUSESTATE_HPP
+#define PAUSESTATE_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -5,9 +7,6 @@
 #include "engine.hpp"
 #include "state.hpp"
 
-
-#ifndef PAUSESTATE_HPP
-#define PAUSESTATE_HPP
 
 class PauseState : public GameState {
 private:

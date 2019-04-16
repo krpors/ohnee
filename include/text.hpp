@@ -1,10 +1,11 @@
+#ifndef TEXT_HPP
+#define TEXT_HPP
+
 #include <memory>
 #include <string>
 
 #include <SFML/Graphics.hpp>
 
-#ifndef TEXT_HPP
-#define TEXT_HPP
 
 class ImageFont {
 private:

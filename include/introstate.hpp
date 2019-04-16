@@ -1,3 +1,6 @@
+#ifndef INTROSTATE_HPP
+#define INTROSTATE_HPP
+
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
@@ -7,11 +10,9 @@
 #include "state.hpp"
 #include "statestack.hpp"
 #include "text.hpp"
-#include "util.hpp"
 #include "ui.hpp"
+#include "util.hpp"
 
-#ifndef INTROSTATE_HPP
-#define INTROSTATE_HPP
 
 /**
  * The intro of the game. Contains some buttons.

@@ -1,12 +1,13 @@
-#include <memory>
+#ifndef UI_HPP
+#define UI_HPP
+
 #include <functional>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 
 #include "text.hpp"
 
-#ifndef UI_HPP
-#define UI_HPP
 
 class Button : public sf::Drawable, public sf::Transformable {
 private:

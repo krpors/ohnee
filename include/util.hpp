@@ -1,3 +1,6 @@
+#ifndef UTIL_HPP
+#define UTIL_HPP
+
 #include <cfloat>
 #include <random>
 #include <memory>
@@ -5,8 +8,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#ifndef UTIL_HPP
-#define UTIL_HPP
 
 // =============================================================================
 
