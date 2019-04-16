@@ -6,8 +6,9 @@
 #include "playstate.hpp"
 #include "state.hpp"
 #include "statestack.hpp"
-#include "util.hpp"
 #include "text.hpp"
+#include "util.hpp"
+#include "ui.hpp"
 
 #ifndef INTROSTATE_HPP
 #define INTROSTATE_HPP
@@ -21,6 +22,8 @@ private:
 	Text text;
 
 	sf::Time timeTotal;
+
+	Button btnStuff;
 
 public:
 	IntroState(StateStack& stack, GameState::Context context);

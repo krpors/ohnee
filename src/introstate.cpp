@@ -22,6 +22,8 @@ void IntroState::init() {
 	   << "Press Q to quit.";
 	text.setText(ss.str());
 	text.setPosition( { 20, 100} );
+
+	btnStuff.setPosition(100, 300);
 }
 
 void IntroState::cleanup() {
@@ -47,4 +49,5 @@ void IntroState::update(const sf::Time& dt) {
 
 void IntroState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(text);
+	target.draw(btnStuff);
 }
