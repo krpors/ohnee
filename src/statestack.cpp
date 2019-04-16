@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "statestack.hpp"
+#include "util.hpp"
 
 static inline const std::string stateIdToString(StateId id) {
     switch (id) {
@@ -10,7 +11,7 @@ static inline const std::string stateIdToString(StateId id) {
     case StateId::Menu:  return "MenuState";
     case StateId::Game:  return "GameState";
     case StateId::Pause: return "PauseState";
-    default: return "";
+    default: return "!UNHANDLED STATE ID!";
     }
 }
 
@@ -52,10 +53,11 @@ void StateStack::handleEvent(const sf::Event& event) {
 }
 
 void StateStack::pushState(StateId id) {
+    // TODO: build will fail without NDEBUG because 'it' is not used
     auto it = this->stateMap.find(id);
     assert (it != this->stateMap.end());
 
-    std::cout << "Pushing state " << stateIdToString(id) << std::endl;
+    TRACE("Pushing state '" << stateIdToString(id) << "'");
     this->pendingActions.emplace_back(PendingAction::ActionType::Push, id);
 }
 

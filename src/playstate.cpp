@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 
 #include "playstate.hpp"
 #include "pausestate.hpp"
@@ -9,6 +10,7 @@ PlayState::PlayState(StateStack& stack, GameState::Context context) :
 }
 
 PlayState::~PlayState() {
+	TRACE("");
 }
 
 void PlayState::init() {

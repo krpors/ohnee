@@ -65,7 +65,6 @@ void Engine::run() {
 	while (this->renderWindow->isOpen() && !this->quit) {
 		sf::Time elapsed = clock.restart();
 
-		// FIXME: asdjklalsdjk
 		sf::Event event;
 		while (this->renderWindow->pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
@@ -77,8 +76,8 @@ void Engine::run() {
 
 		this->renderWindow->clear();
 		fps.update(elapsed);
-		// FIXME: this call
 		stack.update(elapsed);
+
 		this->renderWindow->draw(stack);
 
 		std::stringstream ss;

@@ -8,6 +8,24 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+// =============================================================================
+
+/**
+ * This macro can be used to trace paths in the program.
+ */
+#ifndef NDEBUG
+#define TRACE(x) do { \
+	std::cerr \
+	<< "\x1b[1;32m" << __FILE__ << ":" \
+	<< "\x1b[1;34m" << __LINE__ << " " \
+	<< "\x1b[1;37m" <<__func__ << "()" \
+	<< "\x1b[0m "  << x << std::endl; } while (0)
+#else
+#define TRACE(x)
+#endif
+
+// =============================================================================
+
 /**
  * This function is a very, very simplistic implementation of a convolution
  * matrix to blur the source image onto the target image. TODO: refactor into
@@ -15,7 +33,7 @@
  */
 void blurImage(const sf::Image& source, sf::Image& target);
 
-//==============================================================================
+// =============================================================================
 
 /**
  * Random number generator singleton.
@@ -50,7 +68,7 @@ public:
 
 };
 
-//==============================================================================
+// ==============================================================================
 
 class FpsCounter {
 private:
@@ -65,7 +83,7 @@ public:
 	unsigned int getFps() const;
 };
 
-//==============================================================================
+// ==============================================================================
 
 class Particle {
 public:
@@ -79,7 +97,7 @@ public:
 	~Particle();
 };
 
-//==============================================================================
+// ==============================================================================
 
 class ParticleGenerator : public sf::Drawable {
 private:

@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "text.hpp"
+#include "util.hpp"
 
 ImageFont::ImageFont() {
 }
@@ -14,7 +15,7 @@ ImageFont::ImageFont(const std::string& file, const std::string& glyphs) {
 }
 
 ImageFont::~ImageFont() {
-	std::clog << "Imagefont is destroyed" << std::endl;
+	TRACE("ImageFont " << this->filename << " destroyed");
 }
 
 void ImageFont::load(const std::string& file, const std::string& glyphs) {
@@ -30,7 +31,7 @@ void ImageFont::load(const std::string& file, const std::string& glyphs) {
 	// glyphs.
 	sf::Color sepColor = image.getPixel(0, 0);
 
-	std::clog << "ImageFont created with image file " << file << std::endl;
+	TRACE("Image loaded: " << file);
 
 	// The vector containing rectangle for all the glyphs.
 	std::vector<sf::IntRect> glyphRects;
@@ -79,7 +80,7 @@ void ImageFont::load(const std::string& file, const std::string& glyphs) {
 		throw "Unable to load texture from image object";
 	}
 
-	std::clog << "Initialized ImageFont with " << glyphCount << " glyphs" << std::endl;
+	TRACE("Initialized ImageFont " << this->filename << " with " << glyphCount << " glyphs");
 }
 
 int ImageFont::getFontHeight() const {
@@ -107,8 +108,6 @@ void ImageFont::setKerning(int kerning) {
 }
 
 // =============================================================================
-// Text class.
-// =============================================================================
 
 Text::Text() {
 }
@@ -118,7 +117,7 @@ Text::Text(const std::shared_ptr<ImageFont>& font) {
 }
 
 Text::~Text() {
-	std::clog << "Text is destroyed" << std::endl;
+	TRACE("Text is destroyed");
 }
 
 void Text::setFont(const std::shared_ptr<ImageFont>& font) {
