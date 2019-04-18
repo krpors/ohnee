@@ -20,10 +20,14 @@ public:
 
 	void setCallback(std::function<void()> callback);
 
+	void activate() const;
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	bool selected;
+
+	Text text;
 
 	std::shared_ptr<ImageFont> font;
 
@@ -38,11 +42,11 @@ public:
 
 	void addButton(const Button& button);
 
+	void activate() const;
 	void selectPrevious();
 	void selectNext();
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
 
 private:
 	std::vector<Button> vecButtons;

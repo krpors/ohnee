@@ -117,7 +117,7 @@ Text::Text(const std::shared_ptr<ImageFont>& font) {
 }
 
 Text::~Text() {
-	TRACE("Text is destroyed");
+	TRACE("Text is destroyed (" << this->text << ")");
 }
 
 void Text::setFont(const std::shared_ptr<ImageFont>& font) {

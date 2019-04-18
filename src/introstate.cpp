@@ -23,15 +23,26 @@ void IntroState::init() {
 	text.setText(ss.str());
 	text.setPosition( { 20, 100} );
 
-	Button btn;
+	Button btn(this->context.engine->getFontSmall());
 	btn.setPosition({100, 100});
+	btn.setCallback([] {
+		TRACE("Button one :D");
+	});
 
-	Button btn2;
+	Button btn2(this->context.engine->getFontSmall());
 	btn2.setPosition({ 100, 130});
+	btn2.setCallback([] {
+		TRACE("I AM THE RULER");
+	});
 
-	Button btn3;
+	Button btn3(this->context.engine->getFontSmall());
 	btn3.setPosition({100, 160 });
+	btn3.setCallback([this] {
+		this->context.engine->setQuit(true);
+		TRACE("Quitting!");
+	});
 
+	// TODO: use shared pointers because things get copied and destroyed
 	this->buttonContainer.addButton(btn);
 	this->buttonContainer.addButton(btn2);
 	this->buttonContainer.addButton(btn3);
@@ -59,6 +70,9 @@ void IntroState::handleInput(const sf::Event& event) {
 		break;
 	case sf::Keyboard::Down:
 		this->buttonContainer.selectNext();
+		break;
+	case sf::Keyboard::Return:
+		this->buttonContainer.activate();
 		break;
 	default:
 		break;

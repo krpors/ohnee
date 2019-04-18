@@ -8,6 +8,9 @@ Button::Button() :
 
 Button::Button(const std::shared_ptr<ImageFont> font) :
 	font(font) {
+
+	this->text.setFont(font);
+	this->text.setText("HERRO!!!");
 }
 
 bool Button::isSelected() const {
@@ -22,6 +25,10 @@ void Button::setCallback(std::function<void()> callback) {
 	this->callback = callback;
 }
 
+void Button::activate() const {
+	this->callback();
+}
+
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= this->getTransform();
 
@@ -33,10 +40,11 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	sf::RectangleShape rect;
 	rect.setSize({ 300, 20 });
 	rect.setOutlineThickness(2);
-	rect.setFillColor(sf::Color::Transparent);
+	rect.setFillColor(sf::Color::Black);
 	rect.setOutlineColor(color);
 
 	target.draw(rect, states);
+	target.draw(this->text, states);
 }
 
 // =============================================================================
@@ -50,7 +58,14 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 	// regardless of the buttons, always select the first one for now.
 	this->vecButtons[0].setSelected(true);
+
  }
+
+void Container::activate() const {
+	int idx = this->selectedIndex % this->vecButtons.size();
+	TRACE("Activating button index " << idx);
+	this->vecButtons[idx].activate();
+}
 
 void Container::selectPrevious() {
 	this->selectedIndex--;
