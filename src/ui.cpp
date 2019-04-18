@@ -53,18 +53,18 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	selectedIndex(0) {
  }
 
- void Container::addButton(const Button& b) {
-	this->vecButtons.push_back(b);
+ void Container::addButton(const std::shared_ptr<Button>& btn) {
+	this->vecButtons.push_back(btn);
 
 	// regardless of the buttons, always select the first one for now.
-	this->vecButtons[0].setSelected(true);
+	this->vecButtons[0]->setSelected(true);
 
  }
 
 void Container::activate() const {
 	int idx = this->selectedIndex % this->vecButtons.size();
 	TRACE("Activating button index " << idx);
-	this->vecButtons[idx].activate();
+	this->vecButtons[idx]->activate();
 }
 
 void Container::selectPrevious() {
@@ -84,16 +84,16 @@ void Container::selectNext() {
 void Container::select(int btnIndex) {
 	// First just deselect everything before marking the btnIndex as selected.
 	for (auto& btn : this->vecButtons) {
-		 btn.setSelected(false);
+		 btn->setSelected(false);
 	}
 
 	int idx = btnIndex % this->vecButtons.size();
 	TRACE("Selecting button index " << idx);
-	this->vecButtons[idx].setSelected(true);
+	this->vecButtons[idx]->setSelected(true);
 }
 
  void Container::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	 for (const auto& btn : this->vecButtons) {
-		 btn.draw(target, states);
+		 btn->draw(target, states);
 	 }
  }

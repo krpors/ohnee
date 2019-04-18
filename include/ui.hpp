@@ -40,7 +40,7 @@ class Container : public sf::Drawable {
 public:
 	Container();
 
-	void addButton(const Button& button);
+	void addButton(const std::shared_ptr<Button>& button);
 
 	void activate() const;
 	void selectPrevious();
@@ -49,7 +49,7 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	std::vector<Button> vecButtons;
+	std::vector<std::shared_ptr<Button>> vecButtons;
 
 	void select(int btnIndex);
 
