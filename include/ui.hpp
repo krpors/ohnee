@@ -11,44 +11,45 @@
 
 class Button : public sf::Drawable, public sf::Transformable {
 public:
-    Button();
-    Button(const std::shared_ptr<ImageFont> font);
+	Button();
+	Button(const std::shared_ptr<ImageFont> font);
 
-    bool isSelected() const;
+	bool isSelected() const;
 
-    void setSelected(bool selected);
+	void setSelected(bool selected);
 
-    void setCallback(std::function<void()> callback);
+	void setCallback(std::function<void()> callback);
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    bool selected;
+	bool selected;
 
-    std::shared_ptr<ImageFont> font;
+	std::shared_ptr<ImageFont> font;
 
-    std::function<void()> callback;
+	std::function<void()> callback;
 };
 
 // =============================================================================
 
 class Container : public sf::Drawable {
 public:
-    Container();
+	Container();
 
-    void addButton(const Button& button);
+	void addButton(const Button& button);
 
-    void selectPrevious();
-    void selectNext();
+	void selectPrevious();
+	void selectNext();
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 
 private:
-    std::vector<Button> vecButtons;
+	std::vector<Button> vecButtons;
 
-    int selectedIndex = 0;
+	void select(int btnIndex);
+
+	int selectedIndex;
 };
 
 

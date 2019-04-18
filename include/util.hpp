@@ -2,6 +2,7 @@
 #define UTIL_HPP
 
 #include <cfloat>
+#include <iostream>
 #include <random>
 #include <memory>
 #include <vector>

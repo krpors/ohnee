@@ -29,30 +29,39 @@ void IntroState::init() {
 	Button btn2;
 	btn2.setPosition({ 100, 130});
 
+	Button btn3;
+	btn3.setPosition({100, 160 });
+
 	this->buttonContainer.addButton(btn);
 	this->buttonContainer.addButton(btn2);
+	this->buttonContainer.addButton(btn3);
 }
 
 void IntroState::cleanup() {
 }
 
 void IntroState::handleInput(const sf::Event& event) {
-	if (event.type == sf::Event::KeyPressed) {
-		switch (event.key.code) {
-		case sf::Keyboard::Q:
-			this->context.engine->setQuit(true);
-			break;
-		case sf::Keyboard::P:
-			stateStack->pushState(StateId::Game);
-		case sf::Keyboard::Up:
-			this->buttonContainer.selectPrevious();
-			break;
-		case sf::Keyboard::Down:
-			this->buttonContainer.selectNext();
-			break;
-		default:
-			break;
-		}
+	if (event.type != sf::Event::KeyPressed) {
+		return;
+	}
+
+	TRACE("Handling input (key " << event.key.code << ")");
+
+	switch (event.key.code) {
+	case sf::Keyboard::Q:
+		this->context.engine->setQuit(true);
+		break;
+	case sf::Keyboard::P:
+		stateStack->pushState(StateId::Game);
+		break;
+	case sf::Keyboard::Up:
+		this->buttonContainer.selectPrevious();
+		break;
+	case sf::Keyboard::Down:
+		this->buttonContainer.selectNext();
+		break;
+	default:
+		break;
 	}
 }
 

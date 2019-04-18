@@ -27,7 +27,6 @@ void test() {
 		}
 
 		window.clear();
-		//
 		window.display();
 	}
 }
