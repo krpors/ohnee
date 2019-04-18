@@ -12,7 +12,7 @@ PauseState::PauseState(StateStack& stack, GameState::Context context) :
 }
 
 PauseState::~PauseState() {
-	std::clog << "Destroying pause state" << std::endl;
+	TRACE("Destroying pause state");
 }
 
 void PauseState::init() {

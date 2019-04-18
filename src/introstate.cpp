@@ -23,7 +23,14 @@ void IntroState::init() {
 	text.setText(ss.str());
 	text.setPosition( { 20, 100} );
 
-	btnStuff.setPosition(100, 300);
+	Button btn;
+	btn.setPosition({100, 100});
+
+	Button btn2;
+	btn2.setPosition({ 100, 130});
+
+	this->buttonContainer.addButton(btn);
+	this->buttonContainer.addButton(btn2);
 }
 
 void IntroState::cleanup() {
@@ -37,6 +44,12 @@ void IntroState::handleInput(const sf::Event& event) {
 			break;
 		case sf::Keyboard::P:
 			stateStack->pushState(StateId::Game);
+		case sf::Keyboard::Up:
+			this->buttonContainer.selectPrevious();
+			break;
+		case sf::Keyboard::Down:
+			this->buttonContainer.selectNext();
+			break;
 		default:
 			break;
 		}
@@ -48,6 +61,6 @@ void IntroState::update(const sf::Time& dt) {
 }
 
 void IntroState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(text);
-	target.draw(btnStuff);
+	target.draw(this->text);
+	target.draw(this->buttonContainer);
 }

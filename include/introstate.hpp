@@ -24,7 +24,7 @@ private:
 
 	sf::Time timeTotal;
 
-	Button btnStuff;
+	Container buttonContainer;
 
 public:
 	IntroState(StateStack& stack, GameState::Context context);

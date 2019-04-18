@@ -10,17 +10,46 @@
 
 
 class Button : public sf::Drawable, public sf::Transformable {
-private:
-    std::shared_ptr<ImageFont> font;
-
-    std::function<void()> callback;
 public:
     Button();
     Button(const std::shared_ptr<ImageFont> font);
 
+    bool isSelected() const;
+
+    void setSelected(bool selected);
+
     void setCallback(std::function<void()> callback);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+private:
+    bool selected;
+
+    std::shared_ptr<ImageFont> font;
+
+    std::function<void()> callback;
 };
+
+// =============================================================================
+
+class Container : public sf::Drawable {
+public:
+    Container();
+
+    void addButton(const Button& button);
+
+    void selectPrevious();
+    void selectNext();
+
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+
+
+private:
+    std::vector<Button> vecButtons;
+
+    int selectedIndex = 0;
+};
+
 
 #endif // UI_HPP
