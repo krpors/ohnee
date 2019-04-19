@@ -23,28 +23,32 @@ void IntroState::init() {
 	text.setText(ss.str());
 	text.setPosition( { 20, 100} );
 
-	auto btn1 = std::make_shared<Button>(this->context.engine->getFontSmall());
-	btn1->setPosition({100, 100});
-	btn1->setCallback([] {
-		TRACE("Button one :D");
+	auto btnPlay = std::make_shared<Button>(this->context.engine->getFontSmall());
+	btnPlay->setText("Play da game!");
+	btnPlay->setPosition({100, 100});
+	btnPlay->setCallback([this] {
+		TRACE("Play");
+		this->stateStack->pushState(StateId::Game);
 	});
 
-	auto btn2 = std::make_shared<Button>(this->context.engine->getFontSmall());
-	btn2->setPosition({ 100, 130});
-	btn2->setCallback([] {
-		TRACE("I AM THE RULER");
+	auto btnOptions = std::make_shared<Button>(this->context.engine->getFontSmall());
+	btnOptions->setText("Options");
+	btnOptions->setPosition({ 100, 130 });
+	btnOptions->setCallback([this] {
+		TRACE("Options!");
 	});
 
-	auto btn3 = std::make_shared<Button>(this->context.engine->getFontSmall());
-	btn3->setPosition({100, 160 });
-	btn3->setCallback([this] {
+	auto btnQuit = std::make_shared<Button>(this->context.engine->getFontSmall());
+	btnQuit->setText("Quit");
+	btnQuit->setPosition({ 100, 160 });
+	btnQuit->setCallback([this] {
 		this->context.engine->setQuit(true);
-		TRACE("Quitting!");
+		TRACE("Quit");
 	});
 
-	this->buttonContainer.addButton(btn1);
-	this->buttonContainer.addButton(btn2);
-	this->buttonContainer.addButton(btn3);
+	this->buttonContainer.addButton(btnPlay);
+	this->buttonContainer.addButton(btnOptions);
+	this->buttonContainer.addButton(btnQuit);
 }
 
 void IntroState::cleanup() {
@@ -58,12 +62,6 @@ void IntroState::handleInput(const sf::Event& event) {
 	TRACE("Handling input (key " << event.key.code << ")");
 
 	switch (event.key.code) {
-	case sf::Keyboard::Q:
-		this->context.engine->setQuit(true);
-		break;
-	case sf::Keyboard::P:
-		stateStack->pushState(StateId::Game);
-		break;
 	case sf::Keyboard::Up:
 		this->buttonContainer.selectPrevious();
 		break;
@@ -80,6 +78,8 @@ void IntroState::handleInput(const sf::Event& event) {
 
 void IntroState::update(const sf::Time& dt) {
 	this->timeTotal += dt;
+
+	this->buttonContainer.update(dt);
 }
 
 void IntroState::draw(sf::RenderTarget& target, sf::RenderStates states) const {

@@ -11,8 +11,7 @@
 
 class Button : public sf::Drawable, public sf::Transformable {
 public:
-	Button();
-	Button(const std::shared_ptr<ImageFont> font);
+	Button(const std::shared_ptr<ImageFont>& font);
 
 	bool isSelected() const;
 
@@ -22,12 +21,21 @@ public:
 
 	void activate() const;
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void setText(const std::string& txt);
 
-private:
-	bool selected;
+	virtual void update(const sf::Time& dt);
 
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+protected:
 	Text text;
+
+	std::string buttonText;
+
+	sf::Time time;
+
+	bool selected;
+private:
 
 	std::shared_ptr<ImageFont> font;
 
@@ -46,6 +54,7 @@ public:
 	void selectPrevious();
 	void selectNext();
 
+	void update(const sf::Time& delta);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

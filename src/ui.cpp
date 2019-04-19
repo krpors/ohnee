@@ -1,16 +1,12 @@
 #include "ui.hpp"
 #include "util.hpp"
 
-Button::Button() :
-	selected(false) {
 
-}
-
-Button::Button(const std::shared_ptr<ImageFont> font) :
+Button::Button(const std::shared_ptr<ImageFont>& font) :
+	selected(false),
 	font(font) {
 
 	this->text.setFont(font);
-	this->text.setText("HERRO!!!");
 }
 
 bool Button::isSelected() const {
@@ -27,6 +23,13 @@ void Button::setCallback(std::function<void()> callback) {
 
 void Button::activate() const {
 	this->callback();
+}
+
+void Button::setText(const std::string& str) {
+	this->text.setText(str);
+}
+
+void Button::update(const sf::Time& dt) {
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -90,6 +93,12 @@ void Container::select(int btnIndex) {
 	int idx = btnIndex % this->vecButtons.size();
 	TRACE("Selecting button index " << idx);
 	this->vecButtons[idx]->setSelected(true);
+}
+
+void Container::update(const sf::Time& delta) {
+	for (const auto& btn : this->vecButtons) {
+		btn->update(delta);
+	}
 }
 
  void Container::draw(sf::RenderTarget& target, sf::RenderStates states) const {
