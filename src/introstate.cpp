@@ -23,24 +23,28 @@ void IntroState::init() {
 	text.setText(ss.str());
 	text.setPosition( { 20, 100} );
 
-	auto btnPlay = std::make_shared<Button>(this->context.engine->getFontSmall());
+	const sf::RenderWindow& win = this->context.engine->getRenderWindow();
+	int buttonWidth = 200;
+	float centerx = (win.getSize().x / 2) - (buttonWidth / 2);
+
+	auto btnPlay = std::make_shared<Button>(this->context.engine->getFontLarge());
 	btnPlay->setText("Play da game!");
-	btnPlay->setPosition({100, 100});
+	btnPlay->setPosition({centerx, 100});
 	btnPlay->setCallback([this] {
 		TRACE("Play");
 		this->stateStack->pushState(StateId::Game);
 	});
 
-	auto btnOptions = std::make_shared<Button>(this->context.engine->getFontSmall());
+	auto btnOptions = std::make_shared<Button>(this->context.engine->getFontLarge());
 	btnOptions->setText("Options");
-	btnOptions->setPosition({ 100, 130 });
+	btnOptions->setPosition({ centerx + 10, 130 });
 	btnOptions->setCallback([this] {
 		TRACE("Options!");
 	});
 
-	auto btnQuit = std::make_shared<Button>(this->context.engine->getFontSmall());
+	auto btnQuit = std::make_shared<Button>(this->context.engine->getFontLarge());
 	btnQuit->setText("Quit");
-	btnQuit->setPosition({ 100, 160 });
+	btnQuit->setPosition({ centerx + 20, 160 });
 	btnQuit->setCallback([this] {
 		this->context.engine->setQuit(true);
 		TRACE("Quit");

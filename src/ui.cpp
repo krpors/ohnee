@@ -27,6 +27,8 @@ void Button::activate() const {
 
 void Button::setText(const std::string& str) {
 	this->text.setText(str);
+	// Place the text somewhat down, and more to the right...
+	this->text.setPosition({ this->text.getPosition().x + 5, this->text.getPosition().y + 2});
 }
 
 void Button::update(const sf::Time& dt) {
@@ -41,8 +43,8 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	}
 
 	sf::RectangleShape rect;
-	rect.setSize({ 300, 20 });
-	rect.setOutlineThickness(2);
+	rect.setSize({ 200, 25 });
+	rect.setOutlineThickness(1);
 	rect.setFillColor(sf::Color::Black);
 	rect.setOutlineColor(color);
 
