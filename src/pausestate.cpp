@@ -8,14 +8,6 @@
 PauseState::PauseState(StateStack& stack, GameState::Context context) :
 	GameState(stack, context) {
 
-	this->init();
-}
-
-PauseState::~PauseState() {
-	TRACE("Destroying pause state");
-}
-
-void PauseState::init() {
 	this->pauseText.setFont(this->context.engine->getFontLarge());
 
 	std::string crap = "The game is paused\n";
@@ -42,7 +34,8 @@ void PauseState::init() {
 	this->screencapture.loadFromImage(target);
 }
 
-void PauseState::cleanup() {
+PauseState::~PauseState() {
+	TRACE("Destroying pause state");
 }
 
 void PauseState::handleInput(const sf::Event& event) {
@@ -51,10 +44,6 @@ void PauseState::handleInput(const sf::Event& event) {
 		return;
 	}
 
-	// FIXME: when the init() state takes too much time, and the ESC key is pressed
-	// rapidly, there are more pause states pushed, resulting in a large stack
-	// of pause states! This is mitigated by setting the key repeat to false,
-	// but maybe this requires a better solution.
 	switch (event.key.code) {
 	case sf::Keyboard::Escape:
 		this->stateStack->popState();

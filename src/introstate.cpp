@@ -8,13 +8,6 @@
 IntroState::IntroState(StateStack& stack, GameState::Context context) :
 GameState(stack, context) {
 
-	this->init();
-}
-
-IntroState::~IntroState() {
-}
-
-void IntroState::init() {
 	text.setFont(this->context.engine->getFontLarge());
 	std::stringstream ss;
 	ss << "Welcome to OHNEE!" << std::endl
@@ -55,7 +48,7 @@ void IntroState::init() {
 	this->buttonContainer.addButton(btnQuit);
 }
 
-void IntroState::cleanup() {
+IntroState::~IntroState() {
 }
 
 void IntroState::handleInput(const sf::Event& event) {

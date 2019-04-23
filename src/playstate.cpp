@@ -13,13 +13,6 @@ PlayState::~PlayState() {
 	TRACE("");
 }
 
-void PlayState::init() {
-	this->p.reset();
-}
-
-void PlayState::cleanup() {
-}
-
 void PlayState::handleInput(const sf::Event& event) {
 
 	if (event.type == sf::Event::KeyPressed) {
