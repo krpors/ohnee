@@ -32,6 +32,8 @@ PauseState::PauseState(StateStack& stack, GameState::Context context) :
 
 	this->screencapture.create(winSize.x, winSize.y);
 	this->screencapture.loadFromImage(target);
+
+	this->context.window->setView(this->context.window->getDefaultView());
 }
 
 PauseState::~PauseState() {

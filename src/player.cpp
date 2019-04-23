@@ -215,7 +215,24 @@ bool Player::isCollidingWithSelf() const {
 }
 
 bool Player::isColliding(const Player& other) const {
+	for (const auto& c : other.positions) {
+		if (this->collides(this->pos, this->radius, c.getPosition(), c.getRadius())) {
+			return true;
+		}
+	}
+
 	return false;
+}
+
+void Player::die() {
+	// When already dead, don't do anything.
+	if (this->dead) {
+		return;
+	}
+
+	TRACE("Player " << this->color.toInteger() << " is dead");
+	this->dead = true;
+	blastGenerator.init(*this);
 }
 
 void Player::handleInput(const sf::Event& event) {
@@ -298,8 +315,7 @@ void Player::update(const sf::Time& dt) {
 
 	this->dead = false;
 	if (this->isCollidingWithSelf()) {
-		this->dead = true;
-		blastGenerator.init(*this);
+		this->die();
 	}
 
 	if (this->drawArrow) {

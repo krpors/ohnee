@@ -20,9 +20,14 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	// TODO: text from a resource cache/context or whatever.
+	sf::RenderWindow* window;
+
+	sf::Time dt;
+	sf::View view;
 
 	Player p;
+
+	Player other;
 };
 
 #endif // PLAYSTATE_HPP

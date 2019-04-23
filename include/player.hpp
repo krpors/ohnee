@@ -120,7 +120,9 @@ public:
 	 */
 	void unmove();
 	const sf::Color& getColor() const;
+	// TODO: refactor isCollidingWithSelf.
 	bool isColliding(const Player& other) const;
+	void die();
 	void handleInput(const sf::Event& event);
 	void update(const sf::Time& delta);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

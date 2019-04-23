@@ -11,9 +11,15 @@ class Engine;
 class GameState : public sf::Drawable {
 public:
 
-	class Context {
-		public:
-			Engine* engine;
+	/**
+	 * The Context struct can be used to pass around. It contains resources
+	 * which must be 'shared' throughout the game.
+	 */
+	struct Context {
+	public:
+		sf::RenderWindow* window;
+
+		Engine* engine;
 	};
 
 public:

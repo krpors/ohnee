@@ -53,6 +53,7 @@ void Engine::run() {
 
 	GameState::Context context;
 	context.engine = this;
+	context.window = this->renderWindow.get();
 
 	StateStack stack(context);
 	stack.registerState<IntroState>(StateId::Intro);
