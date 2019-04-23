@@ -123,6 +123,7 @@ public:
 	// TODO: refactor isCollidingWithSelf.
 	bool isColliding(const Player& other) const;
 	void die();
+	bool isDead() const;
 	void handleInput(const sf::Event& event);
 	void update(const sf::Time& delta);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

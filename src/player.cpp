@@ -235,6 +235,10 @@ void Player::die() {
 	blastGenerator.init(*this);
 }
 
+bool Player::isDead() const {
+	return this->dead;
+}
+
 void Player::handleInput(const sf::Event& event) {
 	this->moveLeft = false;
 	this->moveRight = false;
