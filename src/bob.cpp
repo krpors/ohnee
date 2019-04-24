@@ -13,20 +13,17 @@ BobbingText::BobbingText() {
 }
 
 BobbingText::BobbingText(const std::shared_ptr<ImageFont>& font) :
-		Text(font) {
-
-	this->timer = 0.0f;
-	std::stringstream ss;
-	ss << "I am currently watching" << std::endl
-	   << "the Tragedy of systemd." << std::endl
-	   << "!@#$%^&*()-=_+|/\\:;'\"<>,.?" << std::endl;
-
+Text(font),
+timer(sf::Time::Zero) {
 	Text::setPosition(150, 200);
-	Text::setText(ss.str());
+	Text::setText("!NONE!");
 }
 
 BobbingText::~BobbingText() {
+}
 
+void BobbingText::setFunction(const std::function< float(const sf::Time& dt) >& func) {
+	this->function = func;
 }
 
 void BobbingText::handleInput(const sf::Event& event) {
@@ -51,7 +48,11 @@ void BobbingText::handleInput(const sf::Event& event) {
 }
 
 void BobbingText::update(const sf::Time& dt) {
-	this->timer += dt.asSeconds();
-	float f = 1.2f * fabs(sin(3.14f * this->timer)) + 1.0f;
-	setScale(f, f);
+	this->timer += dt;
+
+	// Invokes the operator bool to check whether we have a proper function
+	if (this->function) {
+		float f = this->function(this->timer);
+		setScale(f, f);
+	}
 }

@@ -52,7 +52,7 @@ protected:
 public:
 	Text();
 	Text(const std::shared_ptr<ImageFont>& font);
-	~Text();
+	virtual ~Text();
 
 	void setFont(const std::shared_ptr<ImageFont>& font);
 	void setText(const std::string& str);

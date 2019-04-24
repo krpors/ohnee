@@ -2,14 +2,15 @@
 #define INTROSTATE_HPP
 
 #include <iostream>
+#include <vector>
 
 #include <SFML/Graphics.hpp>
 
+#include "bob.hpp"
 #include "engine.hpp"
 #include "playstate.hpp"
 #include "state.hpp"
 #include "statestack.hpp"
-#include "text.hpp"
 #include "ui.hpp"
 #include "util.hpp"
 
@@ -18,14 +19,6 @@
  * The intro of the game. Contains some buttons.
  */
 class IntroState : public GameState {
-private:
-
-	Text text;
-
-	sf::Time timeTotal;
-
-	Container buttonContainer;
-
 public:
 	IntroState(StateStack& stack, GameState::Context context);
 	~IntroState();
@@ -33,6 +26,15 @@ public:
 	void handleInput(const sf::Event& event) override;
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+private:
+
+	std::vector<std::string> introtexts;
+
+	BobbingText text;
+
+	sf::Time timeTotal;
+
+	Container buttonContainer;
 
 };
 
