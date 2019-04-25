@@ -4,11 +4,11 @@
 // This file contains the state identifiers.
 
 enum StateId {
-    None,
-    Intro,
-    Menu,
-    Game,
-    Pause
+	None,
+	Intro,
+	Menu,
+	Game,
+	Pause
 };
 
 #endif // STATE_IDS_HPP
