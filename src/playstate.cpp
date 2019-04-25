@@ -59,9 +59,13 @@ window(context.window) {
 
 	assert(window != NULL);
 
-	this->p.setColor(sf::Color::Red);
-	this->other.setColor(sf::Color::Green);
 	this->shakeView = this->window->getDefaultView();
+
+	// Add some players to the vector using rvalues
+	this->players.emplace_back(Player(sf::Color::Red, "Red"));
+	this->players.emplace_back(Player(sf::Color::Green, "Green"));
+	this->players.emplace_back(Player(sf::Color::Magenta, "Magenta"));
+
 
 	TRACE(this->shakeView.getCenter().x << ", " << this->shakeView.getCenter().y);
 	TRACE(this->window->getDefaultView().getCenter().x << ", " << this->window->getDefaultView().getCenter().y);
@@ -75,40 +79,38 @@ void PlayState::handleInput(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 		case sf::Keyboard::Escape:
-			this->p.unmove();
+			this->players[0].unmove();
 			this->stateStack->pushState(StateId::Pause);
 			break;
 		default: break;
 		}
 	}
 
-	p.handleInput(event);
+	this->players[0].handleInput(event);
 }
 
 void PlayState::update(const sf::Time& dt) {
-	this->p.update(dt);
-	this->other.update(dt);
+	for (auto& player : this->players) {
+		player.update(dt);
+	}
 	this->shakeView.update(dt);
 	this->window->setView(this->shakeView);
 
-	// TODO: with more than 2 players this will become sucky, so refactor the
-	// isCollidingWithSelf() etc.
-	// TODO: shake the screen when colliding with self. Also: callbacks?
-
-	if (this->p.isColliding(this->other) && !this->p.isDead()) {
-		this->p.die();
-		this->shakeView.setShaking(true);
-		TRACE("P1 is dead!");
-	}
-
-	if (this->other.isColliding(this->p) && !this->other.isDead()) {
-		this->other.die();
-		this->shakeView.setShaking(true);
-		TRACE("P2 is dead!");
+	// Check the players whether we collide with ourselves or with other players.
+	// This is a two-pass O(n²) algorithm.
+	for (auto& p1 : this->players) {
+		for (auto& p2 : this->players) {
+			if (p1.isColliding(p2)) {
+				p1.die();
+				TRACE("Player " << p1.getName() << " died!");
+				this->shakeView.setShaking(true);
+			}
+		}
 	}
 }
 
 void PlayState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(this->p, states);
-	target.draw(this->other, states);
+	for (const auto& player : this->players) {
+		target.draw(player, states);
+	}
 }

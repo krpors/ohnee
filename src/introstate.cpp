@@ -35,6 +35,7 @@ GameState(stack, context) {
 		"Blue screen of death imminent... Or Linux?",
 		"Grab them by the pony.",
 		"e = 2.7182818284590452353602874...",
+		"pi = 3.1415926535897932384626433...",
 		"This game is bugfree!",
 		"Use the source, Luke.",
 		"i = 0x5f3759df - (i >> 1); // what the f?",

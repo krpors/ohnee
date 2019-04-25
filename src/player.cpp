@@ -141,12 +141,14 @@ void BlastGenerator::draw(sf::RenderTarget& target, sf::RenderStates states) con
 
 // =============================================================================
 
-Player::Player() {
-	this->reset();
-}
+Player::Player(const sf::Color& color, const std::string& name) :
+color(color),
+name(name) {
 
-Player::~Player() {
-
+	float startx = Rng::distPos() * 1028;
+	float starty = Rng::distPos() * 768;
+	float angle =  Rng::distPos() * 360;
+	this->setStartingPoint(startx, starty, angle);
 }
 
 bool Player::collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, int radius2) const {
@@ -154,19 +156,6 @@ bool Player::collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, i
 	float dy = pos2.y - pos1.y;
 	float dist = std::sqrt(dx * dx + dy * dy);
 	return dist < (radius1 + radius2);
-}
-
-void Player::reset() {
-	this->dead = false;
-	this->emplacementCounter = sf::Time::Zero;
-	this->positions.clear();
-	this->drawArrow = true;
-	this->totalTime = sf::Time::Zero;
-
-	float startx = Rng::distPos() * 1028;
-	float starty = Rng::distPos() * 768;
-	float angle =  Rng::distPos() * 360;
-	this->setStartingPoint(startx, starty, angle);
 }
 
 const sf::Vector2f& Player::getPosition() const {
@@ -197,6 +186,10 @@ const sf::Color& Player::getColor() const {
 	return this->color;
 }
 
+const std::string& Player::getName() const {
+	return this->name;
+}
+
 bool Player::isCollidingWithSelf() const {
 	// Do not check for all previous positions or we would collide with
 	// ourselves right away. Instead. we iterate from start to end - 10.
@@ -215,6 +208,16 @@ bool Player::isCollidingWithSelf() const {
 }
 
 bool Player::isColliding(const Player& other) const {
+	// No need to check the current player with other players if we're already
+	// dead. So skip checking it asap.
+	if (this->dead) {
+		return false;
+	}
+
+	if (std::addressof(other) == std::addressof(*this)) {
+		return this->isCollidingWithSelf();
+	}
+
 	for (const auto& c : other.positions) {
 		if (this->collides(this->pos, this->radius, c.getPosition(), c.getRadius())) {
 			return true;
@@ -230,7 +233,6 @@ void Player::die() {
 		return;
 	}
 
-	TRACE("Player " << this->color.toInteger() << " is dead");
 	this->dead = true;
 	blastGenerator.init(*this);
 }
@@ -315,11 +317,6 @@ void Player::update(const sf::Time& dt) {
 		}
 
 		this->emplacementCounter = sf::Time::Zero;
-	}
-
-	this->dead = false;
-	if (this->isCollidingWithSelf()) {
-		this->die();
 	}
 
 	if (this->drawArrow) {

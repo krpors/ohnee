@@ -63,6 +63,35 @@ public:
 // =============================================================================
 
 class Player : public sf::Drawable {
+public:
+	Player(const sf::Color& color = sf::Color::Red, const std::string& name = "");
+
+	/**
+	 * Resets the state of the player (i.e. start over fresh).
+	 */
+	void reset();
+
+	const sf::Vector2f& getPosition() const;
+
+	float getAngle() const;
+	void setStartingPoint(int x, int y, float angle);
+	void setColor(const sf::Color& color);
+
+	/**
+	 * Stop moving left or right.
+	 */
+	void unmove();
+	const sf::Color& getColor() const;
+	const std::string& getName() const;
+	bool isColliding(const Player& other) const;
+	void die();
+	bool isDead() const;
+	void handleInput(const sf::Event& event);
+	void update(const sf::Time& delta);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	const std::string str() const;
+
 private:
 	bool drawArrow = true;
 	Arrow arrow;
@@ -76,6 +105,7 @@ private:
 	float angle = 0.0f;
 	sf::Time t = sf::Time::Zero;
 	sf::Color color = sf::Color::Red;
+	std::string name;
 
 	sf::Time totalTime = sf::Time::Zero; // The total time.
 	sf::Time startAfter = sf::seconds(2); // the time when the actual trail starts.
@@ -100,35 +130,6 @@ private:
 	bool collides(const sf::Vector2f pos1, int radius1, sf::Vector2f pos2, int radius2) const;
 
 	bool isCollidingWithSelf() const;
-public:
-	Player();
-	~Player();
-
-	/**
-	 * Resets the state of the player (i.e. start over fresh).
-	 */
-	void reset();
-
-	const sf::Vector2f& getPosition() const;
-
-	float getAngle() const;
-	void setStartingPoint(int x, int y, float angle);
-	void setColor(const sf::Color& color);
-
-	/**
-	 * Stop moving left or right.
-	 */
-	void unmove();
-	const sf::Color& getColor() const;
-	// TODO: refactor isCollidingWithSelf.
-	bool isColliding(const Player& other) const;
-	void die();
-	bool isDead() const;
-	void handleInput(const sf::Event& event);
-	void update(const sf::Time& delta);
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-	const std::string str() const;
 };
 
 #endif // PLAYER_HPP

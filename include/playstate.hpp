@@ -12,6 +12,9 @@
  * This class inherits the basic properties from the sf::View class, but also
  * has some encapsulated logic to perform some 'screen shaking' mechanism, by
  * altering the center values relative to the original 'other' view.
+ *
+ * TODO: i'm a bit sceptical about inheriting from sf::View, combined with C++
+ * and the "rule of 0/3/5". I need an adult!
  */
 class ShakeView : public sf::View {
 public:
@@ -62,11 +65,9 @@ public:
 private:
 	sf::RenderWindow* window;
 
+	std::vector<Player> players;
+
 	ShakeView shakeView;
-
-	Player p;
-
-	Player other;
 };
 
 #endif // PLAYSTATE_HPP
