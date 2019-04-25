@@ -9,6 +9,7 @@ PauseState::PauseState(StateStack& stack, GameState::Context context) :
 	GameState(stack, context) {
 
 	this->pauseText.setFont(this->context.engine->getFontLarge());
+	this->pauseText.setKerning(8);
 
 	std::string crap = "The game is paused\n";
 	crap += "Press Q now to quit to main menu!";

@@ -99,14 +99,6 @@ const std::string& ImageFont::getCharacters() const {
 	return this->glyphs;
 }
 
-int ImageFont::getKerning() const {
-	return this->kerning;
-}
-
-void ImageFont::setKerning(int kerning) {
-	this->kerning = kerning;
-}
-
 // =============================================================================
 
 Text::Text() {
@@ -120,6 +112,14 @@ Text::~Text() {
 	TRACE("Text is destroyed (" << this->text << ")");
 }
 
+int Text::getKerning() const {
+	return this->kerning;
+}
+
+void Text::setKerning(int kerning) {
+	this->kerning = kerning;
+}
+
 void Text::setFont(const std::shared_ptr<ImageFont>& font) {
 	this->font = font;
 }
@@ -131,7 +131,6 @@ void Text::initializeVertexArray() {
 	this->varray.setPrimitiveType(sf::Quads);
 	float x = 0;
 	float y = 0;
-	int kerning = this->font->getKerning();
 	const std::map<char, sf::IntRect>& map = this->font->getGlyphMap();
 	for (const char& c : this->text) {
 		if (c == '\n') {
@@ -158,7 +157,7 @@ void Text::initializeVertexArray() {
 			this->varray.append(bottomright);
 			this->varray.append(bottomleft);
 
-			x += search->second.width + kerning;
+			x += search->second.width + this->kerning;
  		}
 	}
 }

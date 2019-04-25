@@ -7,6 +7,7 @@ Button::Button(const std::shared_ptr<ImageFont>& font) :
 	font(font) {
 
 	this->text.setFont(font);
+	this->text.setKerning(2);
 }
 
 bool Button::isSelected() const {

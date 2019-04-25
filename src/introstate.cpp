@@ -58,6 +58,7 @@ GameState(stack, context) {
 	};
 
 	this->text.setFont(this->context.engine->getFontLarge());
+	this->text.setKerning(2);
 	this->text.setText(*select_randomly(this->introtexts.begin(), this->introtexts.end()));
 	this->text.setPosition( { 150, 200} );
 	this->text.setRotation(-5.0f);

@@ -14,8 +14,6 @@ private:
 
 	std::map<char, sf::IntRect> glyphMap;
 
-	int kerning = 0;
-
 	sf::Image   image;
 	sf::Texture texture;
 public:
@@ -29,9 +27,6 @@ public:
 	const sf::Texture& getTexture() const;
 
 	const std::string& getCharacters() const;
-
-	int getKerning() const;
-	void setKerning(int kerning);
 };
 
 //https://stackoverflow.com/questions/15648844/using-smart-pointers-for-class-members#15649077
@@ -43,6 +38,7 @@ class Text : public sf::Drawable, public sf::Transformable {
 private:
 	std::shared_ptr<ImageFont> font;
 	sf::VertexArray varray;
+	int kerning = 0;
 
 	void initializeVertexArray();
 
@@ -54,6 +50,8 @@ public:
 	Text(const std::shared_ptr<ImageFont>& font);
 	virtual ~Text();
 
+	int getKerning() const;
+	void setKerning(int kerning);
 	void setFont(const std::shared_ptr<ImageFont>& font);
 	void setText(const std::string& str);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
