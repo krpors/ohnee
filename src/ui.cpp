@@ -1,7 +1,6 @@
 #include "ui.hpp"
 #include "util.hpp"
 
-
 Button::Button(const std::shared_ptr<ImageFont>& font) :
 	selected(false),
 	font(font) {
@@ -64,7 +63,6 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 	// regardless of the buttons, always select the first one for now.
 	this->vecButtons[0]->setSelected(true);
-
  }
 
 void Container::activate() const {
@@ -88,6 +86,8 @@ void Container::selectNext() {
 }
 
 void Container::select(int btnIndex) {
+
+
 	// First just deselect everything before marking the btnIndex as selected.
 	for (auto& btn : this->vecButtons) {
 		 btn->setSelected(false);

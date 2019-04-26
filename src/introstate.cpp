@@ -96,9 +96,31 @@ GameState(stack, context) {
 	this->buttonContainer.addButton(btnPlay);
 	this->buttonContainer.addButton(btnOptions);
 	this->buttonContainer.addButton(btnQuit);
+
+	if (!this->music.openFromFile("./media/distressed.ogg")) {
+		TRACE("Music could not be loaded.");
+	}
+
+	if (!this->bufSoundSelect.loadFromFile("./media/select.wav")) {
+		TRACE("Sound could not be loaded");
+	}
+	if (!this->bufSoundOk.loadFromFile("./media/validate.wav")) {
+		TRACE("Could not load ok sound");
+	}
+
+	this->soundSelect.setBuffer(this->bufSoundSelect);
+	this->soundOk.setBuffer(this->bufSoundOk);
 }
 
 IntroState::~IntroState() {
+}
+
+void IntroState::activate() {
+	this->music.play();
+}
+
+void IntroState::deactivate() {
+	this->music.stop();
 }
 
 void IntroState::handleInput(const sf::Event& event) {
@@ -111,12 +133,15 @@ void IntroState::handleInput(const sf::Event& event) {
 	switch (event.key.code) {
 	case sf::Keyboard::Up:
 		this->buttonContainer.selectPrevious();
+		this->soundSelect.play();
 		break;
 	case sf::Keyboard::Down:
 		this->buttonContainer.selectNext();
+		this->soundSelect.play();
 		break;
 	case sf::Keyboard::Return:
 		this->buttonContainer.activate();
+		this->soundOk.play();
 		break;
 	case sf::Keyboard::Escape:
 		this->text.setText(*select_randomly(this->introtexts.begin(), this->introtexts.end()));
