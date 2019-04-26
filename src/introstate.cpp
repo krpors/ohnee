@@ -104,8 +104,16 @@ GameState(stack, context) {
 	if (!this->bufSoundSelect.loadFromFile("./media/select.wav")) {
 		TRACE("Sound could not be loaded");
 	}
+
 	if (!this->bufSoundOk.loadFromFile("./media/validate.wav")) {
 		TRACE("Could not load ok sound");
+	}
+
+	for (int i = 0; i < 10; i++) {
+		sf::Sound snd;
+		snd.setBuffer(this->bufSoundSelect);
+		this->soundList.push_back(snd);
+		TRACE("Added sound " << i);
 	}
 
 	this->soundSelect.setBuffer(this->bufSoundSelect);
@@ -133,11 +141,11 @@ void IntroState::handleInput(const sf::Event& event) {
 	switch (event.key.code) {
 	case sf::Keyboard::Up:
 		this->buttonContainer.selectPrevious();
-		this->soundSelect.play();
+		this->soundList.next().play();
 		break;
 	case sf::Keyboard::Down:
 		this->buttonContainer.selectNext();
-		this->soundSelect.play();
+		this->soundList.next().play();
 		break;
 	case sf::Keyboard::Return:
 		this->buttonContainer.activate();

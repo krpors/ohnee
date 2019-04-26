@@ -8,13 +8,13 @@
 #include <SFML/Graphics.hpp>
 
 #include "bob.hpp"
+#include "circularlist.hpp"
 #include "engine.hpp"
 #include "playstate.hpp"
 #include "state.hpp"
 #include "statestack.hpp"
 #include "ui.hpp"
 #include "util.hpp"
-
 
 /**
  * The intro of the game. Contains some buttons.
@@ -39,6 +39,8 @@ private:
 
 	sf::Sound soundSelect;
 	sf::Sound soundOk;
+
+	CircularList<sf::Sound> soundList;
 
 	BobbingText text;
 
