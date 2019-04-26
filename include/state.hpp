@@ -27,6 +27,9 @@ public:
 	GameState(StateStack& stateStack, GameState::Context context);
 	virtual ~GameState();
 
+	virtual void activate();
+	virtual void deactivate();
+
 	virtual	void handleInput(const sf::Event& event) = 0;
 	virtual void update(const sf::Time& dt) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;

@@ -75,6 +75,14 @@ PlayState::~PlayState() {
 	TRACE("");
 }
 
+void PlayState::activate() {
+	TRACE("activating");
+}
+
+void PlayState::deactivate() {
+	TRACE("deactivating");
+}
+
 void PlayState::handleInput(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {

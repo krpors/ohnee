@@ -71,14 +71,32 @@ void StateStack::popState() {
 }
 
 void StateStack::applyChanges() {
+	// When  there are no pending actions, return immediately.
+	if (this->pendingActions.empty()) {
+		return;
+	}
+
 	for (const auto& a : this->pendingActions) {
 		if (a.action == PendingAction::ActionType::Push) {
 			auto it = this->stateMap.find(a.id);
 			assert (it != this->stateMap.end());
+
+			// first, deactivate the current state, when a new state will be
+			// pushed. This allows us to pause music or sound effects etc, which
+			// are local to a particular state of the game.
+			if (!this->states.empty()) {
+				this->states.top()->deactivate();
+			}
+
 			this->states.push(it->second());
 		} else if (a.action == PendingAction::ActionType::Pop) {
 			this->states.pop();
 		}
+	}
+
+	// when we're done, activate the top.
+	if (!this->states.empty()) {
+		this->states.top()->activate();
 	}
 
 	this->pendingActions.clear();

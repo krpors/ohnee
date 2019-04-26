@@ -8,3 +8,9 @@ context(context) {
 
 GameState::~GameState() {
 }
+
+void GameState::activate() {
+}
+
+void GameState::deactivate() {
+}
