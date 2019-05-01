@@ -11,23 +11,18 @@
 template<typename T>
 class CircularList {
 public:
-	CircularList() {
-		this->it = this->vec.begin();
-	}
 
 	void push_back(T& t) {
 		this->vec.push_back(t);
-		this->it = this->vec.begin();
 	}
 
 	void push_back(T&& t) {
 		this->vec.push_back(t);
-		this->it = this->vec.begin();
 	}
 
 	void clear() {
 		this->vec.clear();
-		this->it = this->vec.begin();
+		this->i = 0;
 	}
 
 	/**
@@ -50,31 +45,46 @@ public:
 	template<typename... Args>
 	void emplace_back(Args&&... args) {
 		this->vec.emplace_back(std::forward<Args>(args)...);
-		this->it = this->vec.begin();
 	}
 
 	/**
-	 * Returns the next element in a cyclic iterating fashion. This means
-	 * that if the end is reached, the iterator will rotate back to the beginning
-	 * of the vector.
+	 * Recede to the previous element in the backing vector, and return it. If
+	 * the beginning is reached, it will 'cycle' to the end of the vector instead.
 	 */
-	T& next() {
-		// Get the value at the position where the iterator currently is.
-		T& ret = *this->it;
-
-		// Advance the itartor, and check whether we hit the end. If so,
-		// assign the iterator to the beginning.
-		this->it++;
-		if (this->it == this->vec.end()) {
-			this->it = this->vec.begin();
+	T& prev() {
+		this->i--;
+		if (this->i < 0) {
+			this->i = static_cast<int>(this->vec.size()) - 1;
 		}
 
-		// Return the ref.
-		return ret;
+		return this->vec.at(i);
+	}
+
+	/**
+	 * Gets the current element.
+	 */
+	T& current() {
+		return this->vec[this->i];
+	}
+
+	/**
+	 * Advance to the next element in the backing vector, and return it. When
+	 * the end is reached, it will return the first element.
+	 */
+	T& next() {
+		this->i++;
+		if (this->i > static_cast<int>(this->vec.size()) - 1) {
+			this->i = 0;
+		}
+
+		return this->vec.at(this->i);
 	}
 private:
 	std::vector<T> vec;
-	typename std::vector<T>::iterator it;
+
+	// Note: we use a signed integer to reference the index because we need to
+	// go negative in order to rotate to the end.
+	int i = 0;
 };
 
 
