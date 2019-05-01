@@ -16,11 +16,14 @@
 #include "ui.hpp"
 #include "util.hpp"
 
+
 /**
  * The intro of the game. Contains some buttons.
  */
 class IntroState : public GameState {
 public:
+	static const std::string INTROTEXTS_FILENAME;
+
 	IntroState(StateStack& stack, GameState::Context context);
 	~IntroState();
 
@@ -30,6 +33,11 @@ public:
 	void update(const sf::Time& dt) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
+
+	/**
+	 * Reads the intro texts from file and places them in the vector, introtexts.
+	 */
+	void readIntroTexts();
 
 	std::vector<std::string> introtexts;
 

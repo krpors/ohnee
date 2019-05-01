@@ -1,4 +1,5 @@
 #include <sstream>
+#include <fstream>
 
 #include "introstate.hpp"
 
@@ -10,6 +11,9 @@
 /**
  * Select an element randomly given a start and end iterator.
  * Returns the Iter.begin().
+ *
+ * FIXME: currently, for this to work, a collection must not be empty.
+ * Dereferencing the iterator obviously will segfault.
  */
 template<typename Iter>
 Iter select_randomly(Iter start, Iter end) {
@@ -24,38 +28,13 @@ Iter select_randomly(Iter start, Iter end) {
 
 // =============================================================================
 
+// The filename which is used to read the introductory bobbing texts.
+const std::string IntroState::INTROTEXTS_FILENAME = "./media/introtexts.txt";
+
 IntroState::IntroState(StateStack& stack, GameState::Context context) :
 GameState(stack, context) {
 
-	this->introtexts = {
-		"The newt bites you. You die...",
-		"Segmentation fault",
-		"Core dumped.",
-		"You've got mail. Check your inbox!",
-		"Blue screen of death imminent... Or Linux?",
-		"Grab them by the pony.",
-		"e = 2.7182818284590452353602874...",
-		"pi = 3.1415926535897932384626433...",
-		"This game is bugfree!",
-		"Use the source, Luke.",
-		"i = 0x5f3759df - (i >> 1); // what the f?",
-		"We have broken SHA-1 in practice.",
-		"When in doubt, print it out!",
-		"Bogosort is the best sort!",
-		"Fatal Error: NO_ERROR",
-		"It's true! It's fantastic. It's great!",
-		"Random number selected: 42",
-		"Tabs for indentation, spaces for alignment!",
-		"Kernel panic!",
-		"Great balls of fire!",
-		"Derp de derp de tiddely derpy derpy dum.\nRated PG-13.",
-		"Click HERE to download more RAM!",
-		"HOW MUCH DEDODATED WAM\nDO I NEED TO RUN SERVER\?\?\?!",
-		"Practice & planning\nprevent piss poor performance.",
-		"Oh sweet summer child...",
-		"STABLE GENIUS!",
-		"const sf::Time& dt;"
-	};
+	this->readIntroTexts();
 
 	this->text.setFont(this->context.engine->getFontLarge());
 	this->text.setKerning(2);
@@ -179,4 +158,40 @@ void IntroState::update(const sf::Time& dt) {
 void IntroState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(this->text);
 	target.draw(this->buttonContainer);
+}
+
+void IntroState::readIntroTexts() {
+	std::ifstream fs;
+	fs.open(INTROTEXTS_FILENAME);
+	if (!fs) {
+		// To prevent major malfunctions with select_randomly, we insert
+		// at least one text.
+		TRACE("Could not read intro texts from file " << INTROTEXTS_FILENAME);
+		this->introtexts.push_back("!COULD NOT READ INTROTEXTS.TXT!");
+		return;
+	}
+
+	this->introtexts.clear();
+
+	// Rather naive implementation I reckon. If a slash is supplied
+	// at the end of the line in the file, bad things will probably happen
+	// due to the indexing of s[i + 1].
+	std::string s;
+	while (std::getline(fs, s)) {
+		std::string buf;
+		for (std::string::size_type i = 0; i < s.length(); i++) {
+			// Is the current character a backslash, followd by n? Then
+			// append an actual newline to the string buf.
+			if (s[i] == '\\' && s[i + 1] == 'n') {
+				buf += '\n';
+				// skip one iteration.
+				i++;
+			} else {
+				buf += s[i];
+			}
+		}
+
+		this->introtexts.push_back(buf);
+	}
+
 }
