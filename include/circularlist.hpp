@@ -25,14 +25,51 @@ public:
 		this->it = this->vec.begin();
 	}
 
+	void clear() {
+		this->vec.clear();
+		this->it = this->vec.begin();
+	}
+
+	/**
+	 * Returns the begin iterator of the backing vector.
+	 */
+	typename std::vector<T>::iterator begin() {
+		return vec.begin();
+	}
+
+	/**
+	 * Return the end iterator of the backing vector.
+	 */
+	typename std::vector<T>::iterator end() {
+		return vec.end();
+	}
+
+	/**
+	 * Delegate to the vector's emplace_back using an std::forward.
+	 */
+	template<typename... Args>
+	void emplace_back(Args&&... args) {
+		this->vec.emplace_back(std::forward<Args>(args)...);
+		this->it = this->vec.begin();
+	}
+
+	/**
+	 * Returns the next element in a cyclic iterating fashion. This means
+	 * that if the end is reached, the iterator will rotate back to the beginning
+	 * of the vector.
+	 */
 	T& next() {
+		// Get the value at the position where the iterator currently is.
 		T& ret = *this->it;
 
+		// Advance the itartor, and check whether we hit the end. If so,
+		// assign the iterator to the beginning.
 		this->it++;
 		if (this->it == this->vec.end()) {
 			this->it = this->vec.begin();
 		}
 
+		// Return the ref.
 		return ret;
 	}
 private:
