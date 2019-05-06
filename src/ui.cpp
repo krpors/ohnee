@@ -32,22 +32,55 @@ void Button::setText(const std::string& str) {
 }
 
 void Button::update(const sf::Time& dt) {
+	this->time += dt;
+
+	if (this->isSelected()) {
+		this->gfx.thickness = 2 * std::sin(this->time.asSeconds() * 2 * M_PI) + 4;
+		this->gfx.selectedColor = sf::Color::Green;
+	} else {
+		this->gfx.thickness = 1;
+		this->gfx.selectedColor = sf::Color::Red;
+	}
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= this->getTransform();
 
-	sf::Color color = sf::Color::Red;
-	if (this->isSelected()) {
-		color = sf::Color::Green;
-	}
+	sf::VertexArray varr;
+	varr.setPrimitiveType(sf::PrimitiveType::Quads);
+
+	sf::Vertex v1;
+	v1.position.x = 0;
+	v1.position.y = 0;
+	v1.color = this->gfx.selectedColor;
+
+	sf::Vertex v2;
+	v2.position.x = this->width;
+	v2.position.y = 0;
+	v2.color = this->gfx.selectedColor;
+
+	sf::Vertex v3;
+	v3.position.x = this->width;
+	v3.position.y = this->height;
+	v3.color = sf::Color::Black;
+
+	sf::Vertex v4;
+	v4.position.x = 0;
+	v4.position.y = this->height;
+	v4.color = sf::Color::Black;
+
+	varr.append(v1);
+	varr.append(v2);
+	varr.append(v3);
+	varr.append(v4);
 
 	sf::RectangleShape rect;
-	rect.setSize({ 200, 25 });
-	rect.setOutlineThickness(1);
-	rect.setFillColor(sf::Color::Black);
-	rect.setOutlineColor(color);
+	rect.setSize({ this->width, this->height });
+	rect.setOutlineThickness(this->gfx.thickness);
+	rect.setFillColor(sf::Color::Transparent);
+	rect.setOutlineColor(this->gfx.selectedColor);
 
+	target.draw(varr, states);
 	target.draw(rect, states);
 	target.draw(this->text, states);
 }
@@ -86,8 +119,6 @@ void Container::selectNext() {
 }
 
 void Container::select(int btnIndex) {
-
-
 	// First just deselect everything before marking the btnIndex as selected.
 	for (auto& btn : this->vecButtons) {
 		 btn->setSelected(false);

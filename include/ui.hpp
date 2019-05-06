@@ -35,9 +35,21 @@ protected:
 	sf::Time time;
 
 	bool selected;
+
+	/**
+	 * Struct holding button graphic properties things.
+	 */
+	struct {
+		sf::Color selectedColor = sf::Color::Green;
+		float thickness = 1;
+	} gfx;
 private:
 
 	std::shared_ptr<ImageFont> font;
+
+	float width = 200;
+
+	float height = 25;
 
 	std::function<void()> callback;
 };
